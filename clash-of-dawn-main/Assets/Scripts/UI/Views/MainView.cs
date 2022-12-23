@@ -38,7 +38,7 @@ public sealed class MainView : View
             return;
 
         infoText.text = $"Is Server = {InstanceFinder.IsServer}, Is Client = {InstanceFinder.IsClient}, Is Host = {InstanceFinder.IsHost}";
-        scoreText.text = $"Score = {Player.Instance.score} Points";
+        scoreText.text = $"Score = {PlayerData.Instance.score} Points";
 
         if (InstanceFinder.IsHost) {
             playerCountText.text = $"Players = {InstanceFinder.ServerManager.Clients.Count}";
