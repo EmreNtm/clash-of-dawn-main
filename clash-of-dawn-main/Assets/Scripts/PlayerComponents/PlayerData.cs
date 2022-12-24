@@ -4,6 +4,7 @@ using UnityEngine;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine.AddressableAssets;
+using FishNet.Connection;
 
 public sealed class PlayerData : NetworkBehaviour
 {
@@ -69,7 +70,9 @@ public sealed class PlayerData : NetworkBehaviour
         isReady = value;
     }
 
-    public void StartGame() {
+    //Server calls this
+    public void StartGame(NetworkConnection conn) {
+        CreateMap(conn);
         GameObject pawnPrefab = Addressables.LoadAssetAsync<GameObject>("Pawn").WaitForCompletion();
 
         GameObject pawnInstance = Instantiate(pawnPrefab);
@@ -78,10 +81,16 @@ public sealed class PlayerData : NetworkBehaviour
         controlledPawn = pawnInstance.GetComponent<Pawn>();
     }
 
+    //Server calls this
     public void StopGame() {
         if (controlledPawn != null && controlledPawn.IsSpawned) {
             controlledPawn.Despawn();
         }
+    }
+
+    [TargetRpc]
+    private void CreateMap(NetworkConnection conn) {
+        MapManager.Instance.CreateSystem(MapManager.Instance.systemSettings.seed);
     }
 
 }

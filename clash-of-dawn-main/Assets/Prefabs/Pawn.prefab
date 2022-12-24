@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7080780449077688932}
   - component: {fileID: 2910381193339209331}
   - component: {fileID: 8694800601751710527}
+  - component: {fileID: 7619142248921135992}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -42,8 +43,8 @@ Camera:
   m_GameObject: {fileID: 145717121662516050}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -56,8 +57,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.01
-  far clip plane: 256
+  near clip plane: 0.3
+  far clip plane: 1000000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -84,6 +85,39 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145717121662516050}
   m_Enabled: 1
+--- !u!114 &7619142248921135992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145717121662516050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!1 &5381248484253859717
 GameObject:
   m_ObjectHideFlags: 0
@@ -141,7 +175,9 @@ MonoBehaviour:
   _networkBehaviours:
   - {fileID: 3226090392293263817}
   - {fileID: 9164725439389279505}
+  - {fileID: 5491661173448078159}
   - {fileID: 1049165785767361919}
+  - {fileID: -1704159374686655245}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
@@ -204,9 +240,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa057f66d5821fc41b74f7b25e01b3fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
+  _componentIndexCache: 2
   _addedNetworkObject: {fileID: 7857870474553092835}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 7857870474553092835}
   myCamera: {fileID: 7080780449077688932}
   xMin: -90
   xMax: 90
@@ -222,7 +258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6959fb7ae7627bf418a6b7b4078e9d37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 2
+  _componentIndexCache: 3
   _addedNetworkObject: {fileID: 7857870474553092835}
   _networkObjectCache: {fileID: 7857870474553092835}
   speed: 5
@@ -258,9 +294,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
+  _componentIndexCache: 4
   _addedNetworkObject: {fileID: 7857870474553092835}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 7857870474553092835}
   _synchronizeParent: 0
   _packing:
     Position: 1
@@ -349,7 +385,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a237a314745df0f41916dc93e8775dd6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

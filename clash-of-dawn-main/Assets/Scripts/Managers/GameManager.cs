@@ -4,6 +4,8 @@ using UnityEngine;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using System.Linq;
+using UnityEngine.AddressableAssets;
+using FishNet.Connection;
 
 public sealed class GameManager : NetworkBehaviour
 {
@@ -32,8 +34,19 @@ public sealed class GameManager : NetworkBehaviour
         if (!canStart)
             return;
 
+        //MapManager.Instance.CreateSystem(MapManager.Instance.systemSettings.seed);
+        // GameObject prefab = Addressables.LoadAssetAsync<GameObject>("Planet").WaitForCompletion();
+        // GameObject go = Instantiate(prefab);
+        // Spawn(go, Owner);
+        //go.transform.parent = MapManager.Instance.transform.GetChild(0).GetChild(0);
+        //go.GetComponent<PlanetObject>().CreatePlanet();
+        GameObject mapManagerPrefab = Addressables.LoadAssetAsync<GameObject>("MapManager").WaitForCompletion();
+        GameObject go = Instantiate(mapManagerPrefab);
+        Spawn(go);
+
         for (int i = 0; i < players.Count; i++) {
-            players[i].StartGame();
+            players[i].StartGame(players[i].Owner);
+            //SetPlanetTransform(players[i].Owner, go);
         }
     }
 
@@ -43,5 +56,17 @@ public sealed class GameManager : NetworkBehaviour
             players[i].StopGame();
         }
     }
+
+    [TargetRpc]
+    private void SetPlanetTransform(NetworkConnection conn, GameObject go) {
+        go.transform.parent = MapManager.Instance.transform.GetChild(0).GetChild(0);
+        go.GetComponent<PlanetObject>().CreatePlanet();
+    }
+
+        // GameObject prefab = Addressables.LoadAssetAsync<GameObject>("Planet").WaitForCompletion();
+        // GameObject go = Instantiate(prefab);
+        // go.transform.parent = MapManager.Instance.transform.GetChild(0).GetChild(0);
+        // go.GetComponent<PlanetObject>().CreatePlanet();
+        // Spawn(go, Owner);
 
 }

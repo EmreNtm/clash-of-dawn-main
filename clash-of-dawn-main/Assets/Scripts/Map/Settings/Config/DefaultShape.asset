@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca01fb91665b7e489d08ac2b4c7a81c, type: 3}
+  m_Name: DefaultShape
+  m_EditorClassIdentifier: 
+  planetRadius: 400
+  noiseData:
+    noiseLayers:
+    - isEnabled: 1
+      isUsingMask: 0
+      filterMode: 0
+      octaves: 4
+      persistance: 0.27
+      lacunarity: 6
+      heightMultiplier: 0.02
+      scale: 0.8
+      seed: 113
+      offset: {x: 0, y: 0, z: 0}
+      noiseSubValue: 0.7
+    - isEnabled: 1
+      isUsingMask: 1
+      filterMode: 0
+      octaves: 4
+      persistance: 0.5
+      lacunarity: 1.5
+      heightMultiplier: 0.14
+      scale: 0.8
+      seed: 0
+      offset: {x: 0, y: 0, z: 0}
+      noiseSubValue: 0
+    noiseConfigs:
+    - octaves: 4
+      persistance: 0.27
+      lacunarity: 6
+      heightMultiplier: 0.02
+      scale: 0.8
+      seed: 113
+      offset: {x: 0, y: 0, z: 0}
+      octaveOffsets:
+      - {x: 52060, y: 94725, z: 50733}
+      - {x: 35442, y: -55216, z: -38133}
+      - {x: 7286, y: -73497, z: 91507}
+      - {x: 88515, y: 8491, z: 37609}
+      noiseSubValue: 0.7
+      filterMode: 0
+    - octaves: 4
+      persistance: 0.5
+      lacunarity: 1.5
+      heightMultiplier: 0.14
+      scale: 0.8
+      seed: 0
+      offset: {x: 0, y: 0, z: 0}
+      octaveOffsets:
+      - {x: 45248, y: 63465, z: 53604}
+      - {x: 11632, y: -58794, z: 11776}
+      - {x: 81205, y: -11565, z: 95509}
+      - {x: -45260, y: -41619, z: -6538}
+      noiseSubValue: 0
+      filterMode: 0

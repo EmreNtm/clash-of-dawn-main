@@ -21,6 +21,14 @@ MonoBehaviour:
     m_Address: Pawn
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: a879e29461f527a45ac7d88a9f07b261
+    m_Address: Planet
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 474fc46cdb708064a80add29662fae47
+    m_Address: MapManager
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 9ef9e390ac2dcc4498bdcafc67e2bbd1, type: 2}
   m_SchemaSet:
