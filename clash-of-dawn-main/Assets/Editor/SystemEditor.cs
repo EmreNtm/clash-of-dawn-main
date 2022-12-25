@@ -14,7 +14,7 @@ public class SystemEditor : Editor
         base.OnInspectorGUI();
 
         if (GUILayout.Button("Create System")) {
-            mapManager.CreateSystem();
+            mapManager.CreateOfflineSystem();
         }
 
         DrawSettingsEditor(mapManager.systemSettings, mapManager.OnSystemSettingsUpdate, ref systemSettingsEditor);
