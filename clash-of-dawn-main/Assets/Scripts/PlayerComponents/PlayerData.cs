@@ -73,12 +73,16 @@ public sealed class PlayerData : NetworkBehaviour
     //Server calls this
     public void StartGame(NetworkConnection conn) {
         CreateMap(conn);
-        GameObject pawnPrefab = Addressables.LoadAssetAsync<GameObject>("Pawn").WaitForCompletion();
+        //GameObject pawnPrefab = Addressables.LoadAssetAsync<GameObject>("Pawn").WaitForCompletion();
 
-        GameObject pawnInstance = Instantiate(pawnPrefab);
-        Spawn(pawnInstance, Owner);
+        //GameObject pawnInstance = Instantiate(pawnPrefab);
+        //Spawn(pawnInstance, Owner);
 
-        controlledPawn = pawnInstance.GetComponent<Pawn>();
+        GameObject shipPrefab = Addressables.LoadAssetAsync<GameObject>("Ship").WaitForCompletion();
+        GameObject shipInstance = Instantiate(shipPrefab);
+        Spawn(shipInstance, Owner);
+
+        //controlledPawn = pawnInstance.GetComponent<Pawn>();
     }
 
     //Server calls this

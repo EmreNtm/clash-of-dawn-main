@@ -8,6 +8,7 @@ public class ChangeSunlightDirection : MonoBehaviour
 
 	void Start () {
 		track = Camera.main?.transform;
+		RenderSettings.sun = GetComponent<Light>();
 	}
 
 	void LateUpdate () {

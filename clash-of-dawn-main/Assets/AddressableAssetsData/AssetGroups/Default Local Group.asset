@@ -29,6 +29,10 @@ MonoBehaviour:
     m_Address: MapManager
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: fc8830442f0fff9498df878d38850d2e
+    m_Address: Ship
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 9ef9e390ac2dcc4498bdcafc67e2bbd1, type: 2}
   m_SchemaSet:
