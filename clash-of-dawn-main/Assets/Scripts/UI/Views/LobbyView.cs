@@ -18,6 +18,12 @@ public class LobbyView : View
     [SerializeField]
     private Button startGameButton;
 
+    [SerializeField]
+    private TextMeshProUGUI infoText;
+
+    [SerializeField]
+    private TextMeshProUGUI playerCountText;
+
     public override void Initialize()
     {
         toggleReadyButton.onClick.AddListener(() => {
@@ -44,6 +50,16 @@ public class LobbyView : View
 
          toggleReadyButtonText.color = PlayerData.Instance.isReady ? Color.green : Color.red;
          startGameButton.interactable = GameManager.Instance.canStart;
+
+        infoText.text = $"Is Server = {InstanceFinder.IsServer}, Is Client = {InstanceFinder.IsClient}, Is Host = {InstanceFinder.IsHost}";
+
+        if (InstanceFinder.IsHost) {
+            playerCountText.text = $"Players = {InstanceFinder.ServerManager.Clients.Count}";
+
+            playerCountText.gameObject.SetActive(true);
+        } else {
+            playerCountText.gameObject.SetActive(false);
+        }
     }
 
 }

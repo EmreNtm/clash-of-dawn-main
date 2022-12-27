@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FishNet.Object;
+using FishNet.Connection;
 
 [RequireComponent(typeof(ParticleSystem))]
-public class BulletParticle : MonoBehaviour
+public class BulletParticle : NetworkBehaviour
 {
     
     
@@ -14,14 +16,27 @@ public class BulletParticle : MonoBehaviour
    
     private void Update()
     {
-        // Apply the particle changes to the Particle System
+        if (!IsOwner)
+            return;
         
-        if (Input.GetButton("Fire1") && !firing )
-        {
-            firing = true;
-
-            StartCoroutine(FiringBullets());
+        // Apply the particle changes to the Particle System
+        if (Input.GetButton("Fire1") && !firing ) {
+            ServerFireFlak();
         }
+    }
+
+
+    [ServerRpc]
+    public void ServerFireFlak() {
+        foreach (PlayerData pd in GameManager.Instance.players) {
+            TargetFireFlak(pd.Owner);
+        }
+    }
+
+    [TargetRpc]
+    public void TargetFireFlak(NetworkConnection conn) {
+        firing = true;
+        StartCoroutine(FiringBullets());
     }
 
 

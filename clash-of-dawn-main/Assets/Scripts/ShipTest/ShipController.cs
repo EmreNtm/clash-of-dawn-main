@@ -1,15 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FishNet.Object;
+using FishNet.Connection;
 
-public class ShipController : MonoBehaviour
+public class ShipController : NetworkBehaviour
 {
     
+    [SerializeField]
+    private Transform myCamera;
+    [SerializeField]
+    private Transform thirdPersonCamera;
+
     [SerializeField] private LayerMask playerShipMask;
     private Camera mainCamera;
     public Rigidbody shipRigidBody;
     private readonly float enginePower = 1000f;    //enginePower of ship
-    private readonly float rollEnginePower = 100f;   //ships engines for rolling
+    private readonly float rollEnginePower = 2f;   //ships engines for rolling
     private bool waitLog = false;   //just for logs
     private Vector3 targetDirection; //direction of ship from camera raycast
     //InterStellar Issies
@@ -28,6 +35,7 @@ public class ShipController : MonoBehaviour
     public bool interStellarToggle = false; //is player toggle interStellarEngine
     public bool inActivateInterStellarMode = false; //is interStellar engine heating?
     public bool interStellarEngineWorking = false; //is inter stellar engine working right now
+    public bool lockingShipAim = false;
 
     //Public fields of this ship so player and we can see it on inspector
     [Range(-0.4f, 1f)] public float thrustPercentage;
@@ -36,15 +44,40 @@ public class ShipController : MonoBehaviour
     [Range(-100f, 100f)] public float rollEngineActivePower = 0f;
     public float turnSpeed;
 
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+
+        thirdPersonCamera.gameObject.SetActive(IsOwner);
+        myCamera.gameObject.SetActive(IsOwner);
+    }
+
     void Start() {
-        mainCamera = Camera.main;
+        mainCamera = myCamera.GetComponent<Camera>();
         thrustPercentage = 0f;
         rollEngineActivePower = 0f;
         turnSpeed = 0.001f;
         //shipsRigidBody = GetComponent<Rigidbody>();
+
+        ServerSetShipSpawnPosition();
+    }
+
+    [ServerRpc]
+    public void ServerSetShipSpawnPosition() {
+        foreach (PlayerData pd in GameManager.Instance.players) {
+            TargetSetShipSpawnPoint(pd.Owner, Random.Range(200, 1000));
+        }
+    }
+
+    [TargetRpc]
+    public void TargetSetShipSpawnPoint(NetworkConnection conn, float random) {
+        shipRigidBody.transform.position = new Vector3(0, 0, random);
     }
 
     void Update() {
+        if (!IsOwner)
+            return;
+
         var (success, position) = GetMousePosition();
         targetDirection = (position - shipRigidBody.transform.position).normalized;
 
@@ -101,12 +134,19 @@ public class ShipController : MonoBehaviour
             interStellarEngineWorking = false;
         }
 
+        if (Input.GetButtonDown("Fire2")) {
+            lockingShipAim = !lockingShipAim;
+        }
+
         if (!waitLog) {
             StartCoroutine(Loggss());
         }
     }
 
     void FixedUpdate() {
+        if (!IsOwner)
+            return;
+
         AimShip(targetDirection);
     }
 
@@ -120,7 +160,11 @@ public class ShipController : MonoBehaviour
         }
         if (turnSpeed > 0.05f) {
             turnSpeed *= 0.01f;
-            steeringVector = steeringVector.normalized * turnSpeed;
+            if (lockingShipAim) {
+                steeringVector = steeringVector.normalized * 0;
+            } else {
+                steeringVector = steeringVector.normalized * turnSpeed;
+            }
             targetDirection = shipRigidBody.transform.forward + steeringVector; 
         } else {
             targetDirection = shipRigidBody.transform.forward;
@@ -137,7 +181,7 @@ public class ShipController : MonoBehaviour
         if (Physics.Raycast(ray, out var hitInfo, 1000000f, playerShipMask)) {
             return (success: true, position: hitInfo.point);
         } else {
-            Vector3 vec = ray.direction * 500f;
+            Vector3 vec = ray.direction * 1000000f;
             return (success: false, position: mainCamera.transform.position + vec);
         }
     }
