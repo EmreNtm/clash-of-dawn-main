@@ -13,12 +13,16 @@ public class BulletParticle : NetworkBehaviour
     public ParticleSystem muzzleFlashLeft;
     
     public ParticleSystem bullet;
-   
+
+    public Rigidbody shipRigidbody;
+
     private void Update()
     {
         if (!IsOwner)
             return;
         
+        bullet.main.emitterVelocity.Set(shipRigidbody.velocity.x, shipRigidbody.velocity.y, shipRigidbody.velocity.z);
+
         // Apply the particle changes to the Particle System
         if (Input.GetButton("Fire1") && !firing ) {
             ServerFireFlak();
