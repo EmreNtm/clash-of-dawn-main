@@ -30,6 +30,10 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: fc8830442f0fff9498df878d38850d2e
+    m_Address: OldShip
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: b04c0e2a488a44c47bd994eb5554ae9e
     m_Address: Ship
     m_ReadOnly: 0
     m_SerializedLabels: []

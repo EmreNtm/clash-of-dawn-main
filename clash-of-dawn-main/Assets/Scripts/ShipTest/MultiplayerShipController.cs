@@ -395,7 +395,7 @@ public class MultiplayerShipController : NetworkBehaviour
             turnSpeed = 1;
         }
         if (turnSpeed > 0.05f) {
-            turnSpeed *= 0.01f;
+            turnSpeed *= 0.05f;
             if (md.lockingShipAim) {
                 steeringVector = steeringVector.normalized * 0;
             } else {

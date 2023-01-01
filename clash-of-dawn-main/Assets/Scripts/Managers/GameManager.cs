@@ -11,6 +11,9 @@ public sealed class GameManager : NetworkBehaviour
 {
     
     public static GameManager Instance { get; private set; }
+    public GameObject mapManagerPrefab;
+    public GameObject shipPrefab;
+    public GameObject planetPrefab;
 
     [SyncObject]
     public readonly SyncList<PlayerData> players = new();
@@ -40,7 +43,8 @@ public sealed class GameManager : NetworkBehaviour
         // Spawn(go, Owner);
         //go.transform.parent = MapManager.Instance.transform.GetChild(0).GetChild(0);
         //go.GetComponent<PlanetObject>().CreatePlanet();
-        GameObject mapManagerPrefab = Addressables.LoadAssetAsync<GameObject>("MapManager").WaitForCompletion();
+
+        //GameObject mapManagerPrefab = Addressables.LoadAssetAsync<GameObject>("MapManager").WaitForCompletion();
         GameObject go = Instantiate(mapManagerPrefab);
         Spawn(go);
 

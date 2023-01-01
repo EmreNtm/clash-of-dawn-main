@@ -670,6 +670,9 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 563816483}
   _networkObjectCache: {fileID: 563816483}
+  mapManagerPrefab: {fileID: 5921969082350682657, guid: 474fc46cdb708064a80add29662fae47, type: 3}
+  shipPrefab: {fileID: 1484421572893219048, guid: b04c0e2a488a44c47bd994eb5554ae9e, type: 3}
+  planetPrefab: {fileID: 1038345663172935239, guid: a879e29461f527a45ac7d88a9f07b261, type: 3}
   canStart: 0
 --- !u!114 &563816483
 MonoBehaviour:
@@ -1002,7 +1005,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &903332369
 MeshCollider:
   m_ObjectHideFlags: 0

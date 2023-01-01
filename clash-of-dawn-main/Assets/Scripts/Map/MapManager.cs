@@ -83,8 +83,8 @@ public class MapManager : NetworkBehaviour
     }
 
     private void SpawnPlanet(SystemSettings.PlanetSetting planetSetting, int settingIndex, ref float lastOrbitDistance) {
-        GameObject prefab = Addressables.LoadAssetAsync<GameObject>("Planet").WaitForCompletion();
-        GameObject go = Instantiate(prefab);
+        //GameObject prefab = Addressables.LoadAssetAsync<GameObject>("Planet").WaitForCompletion();
+        GameObject go = Instantiate(GameManager.Instance.planetPrefab);
         planets.Add(go);
         GameManager.Instance.Spawn(go);
         
@@ -124,7 +124,9 @@ public class MapManager : NetworkBehaviour
         rp.rotationSpeed = parameters.rotationSpeed;
 
         //Place Planet to orbit of center star
-        go.transform.localPosition = PointOnUnitCircle() * orbitDistance;
+        Vector3 orbitPos = PointOnUnitCircle() * orbitDistance;
+        orbitPos.y = (float) prng.NextDouble() * ss.planetRadius * 8f - ss.planetRadius * 4f;
+        go.transform.localPosition = orbitPos;
     }
 
     private void TryToSpawnMoon(GameObject go, SystemSettings.PlanetSetting planetSetting, int settingIndex, int availableMoonAmount, float distance) {
@@ -176,7 +178,9 @@ public class MapManager : NetworkBehaviour
         rp.rotationSpeed = parameters.rotationSpeed;
 
         //Place Planet to orbit of center star
-        moon.transform.localPosition = parentPlanet.transform.localPosition + PointOnUnitCircle() * orbitDistance;
+        Vector3 orbitPos = parentPlanet.transform.localPosition + PointOnUnitCircle() * orbitDistance;
+        orbitPos.y = (float) prng.NextDouble() * ss.planetRadius * 8f - ss.planetRadius * 4f;
+        moon.transform.localPosition = orbitPos;
     }
 
     [TargetRpc]
@@ -239,7 +243,9 @@ public class MapManager : NetworkBehaviour
         rp.rotationSpeed = new Vector3(serverPrng.Next(-5, 5), serverPrng.Next(-5, 5), serverPrng.Next(-5, 5));
 
         //Place Planet to orbit of center star
-        go.transform.localPosition = PointOnUnitCircle() * lastOrbitDistance;
+        Vector3 orbitPos = PointOnUnitCircle() * lastOrbitDistance;
+        orbitPos.y = (float) prng.NextDouble() * ss.planetRadius * 8f - ss.planetRadius * 4f;
+        go.transform.localPosition = orbitPos;
         planets.Add(go);
     }
 
@@ -269,7 +275,9 @@ public class MapManager : NetworkBehaviour
         rp.rotationSpeed = new Vector3((float) serverPrng.NextDouble() * 4 - 2, (float) serverPrng.NextDouble() * 10 - 5, (float) serverPrng.NextDouble() * 4 - 2);
 
         //Place Moon to orbit of Planet
-        moon.transform.localPosition = go.transform.localPosition + PointOnUnitCircle() * distance;
+        Vector3 orbitPos = go.transform.localPosition + PointOnUnitCircle() * distance;
+        orbitPos.y = (float) prng.NextDouble() * ss.planetRadius * 8f - ss.planetRadius * 4f;
+        moon.transform.localPosition = orbitPos;
         planets.Add(moon);
 
         //Try to add another Moon to Planet

@@ -27,9 +27,6 @@ public sealed class PlayerData : NetworkBehaviour
     }
 
     [SyncVar]
-    public Pawn controlledPawn;
-
-    [SyncVar]
     public GameObject playerShip;
 
     //Called on server
@@ -76,23 +73,18 @@ public sealed class PlayerData : NetworkBehaviour
     //Server calls this
     public void StartGame(NetworkConnection conn) {
         CreateMap(conn);
-        // GameObject pawnPrefab = Addressables.LoadAssetAsync<GameObject>("Pawn").WaitForCompletion();
 
-        // GameObject pawnInstance = Instantiate(pawnPrefab);
-        // Spawn(pawnInstance, Owner);
-
-        GameObject shipPrefab = Addressables.LoadAssetAsync<GameObject>("Ship").WaitForCompletion();
-        GameObject shipInstance = Instantiate(shipPrefab);
+        //GameObject shipPrefab = Addressables.LoadAssetAsync<GameObject>("Ship").WaitForCompletion();
+        GameObject shipInstance = Instantiate(GameManager.Instance.shipPrefab);
         Spawn(shipInstance, Owner);
         playerShip = shipInstance;
-
-        // controlledPawn = pawnInstance.GetComponent<Pawn>();
     }
 
     //Server calls this
     public void StopGame() {
-        if (controlledPawn != null && controlledPawn.IsSpawned) {
-            controlledPawn.Despawn();
+        MultiplayerShipController msp = playerShip.GetComponent<MultiplayerShipController>();
+        if (msp != null && msp.IsSpawned) {
+            msp.Despawn();
         }
     }
 
