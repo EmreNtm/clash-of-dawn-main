@@ -13,6 +13,9 @@ public class MapManager : NetworkBehaviour
     [HideInInspector]
     public StarManager starManager;
 
+    public GameObject planetPrefab;
+    public GameObject stationPrefab;
+
     public static MapManager Instance { get; private set; }
 
     public SystemSettings systemSettings;
@@ -29,6 +32,9 @@ public class MapManager : NetworkBehaviour
     public List<GameObject> planets;
     [HideInInspector]
     public List<SystemSettings.PlanetSetting> planetsToCreate;
+
+    [HideInInspector]
+    public List<GameObject> stations;
 
     [HideInInspector]
     public static System.Random prng;
@@ -50,6 +56,12 @@ public class MapManager : NetworkBehaviour
         }
         planets.Clear();
         planets = new();
+
+        foreach (GameObject gameObject in stations) {
+            SafeDestroy(gameObject);
+        }
+        stations.Clear();
+        stations = new();
         
         planetsToCreate = new();
         foreach (SystemSettings.PlanetSetting planetSetting in systemSettings.planetSettings) {
@@ -64,6 +76,7 @@ public class MapManager : NetworkBehaviour
             float distance = 0;
             for (int i = planetsToCreate.Count - 1; i >= 0; i--) {
                 SpawnPlanet(planetsToCreate[i], i, ref distance);
+                TryToSpawnSpaceStation(planetsToCreate[i], planets[planets.Count - 1]);
                 TryToSpawnMoon(planets[planets.Count - 1], planetsToCreate[i], i, planetsToCreate[i].maxMoonAmount, planets[planets.Count - 1].GetComponent<PlanetObject>().shapeSettings.planetRadius);
             }
 
@@ -84,7 +97,7 @@ public class MapManager : NetworkBehaviour
 
     private void SpawnPlanet(SystemSettings.PlanetSetting planetSetting, int settingIndex, ref float lastOrbitDistance) {
         //GameObject prefab = Addressables.LoadAssetAsync<GameObject>("Planet").WaitForCompletion();
-        GameObject go = Instantiate(GameManager.Instance.planetPrefab);
+        GameObject go = Instantiate(MapManager.Instance.planetPrefab);
         planets.Add(go);
         GameManager.Instance.Spawn(go);
         
@@ -129,12 +142,35 @@ public class MapManager : NetworkBehaviour
         go.transform.localPosition = orbitPos;
     }
 
+    private void TryToSpawnSpaceStation(SystemSettings.PlanetSetting planetSetting, GameObject planet) {
+        if (serverPrng.NextDouble() > planetSetting.stationCreateChance)
+            return;
+
+        GameObject go = Instantiate(MapManager.Instance.stationPrefab);
+        stations.Add(go);
+        GameManager.Instance.Spawn(go);
+
+        foreach (PlayerData pd in GameManager.Instance.players) {
+            TargetSpawnStation(pd.Owner, planet, go, planetSetting.stationDistance);
+        }
+    }
+
+    [TargetRpc]
+    private void TargetSpawnStation(NetworkConnection conn, GameObject planet, GameObject go, float stationDistance) {
+        go.transform.parent = MapManager.Instance.transform.GetChild(0).GetChild(1);
+
+        float planetRadius = planet.GetComponent<PlanetObject>().shapeSettings.planetRadius;
+        Vector3 orbitPos = planet.transform.localPosition + PointOnUnitSphere() * (planetRadius + (float) prng.NextDouble() * planetRadius / 4f + stationDistance);
+        go.transform.localPosition = orbitPos;
+        stations.Add(go);
+    }
+
     private void TryToSpawnMoon(GameObject go, SystemSettings.PlanetSetting planetSetting, int settingIndex, int availableMoonAmount, float distance) {
         if (availableMoonAmount == 0 || serverPrng.NextDouble() > planetSetting.moonCreateChance)
             return;
 
-        GameObject prefab = Addressables.LoadAssetAsync<GameObject>("Planet").WaitForCompletion();
-        GameObject moon = Instantiate(prefab);
+        //GameObject prefab = Addressables.LoadAssetAsync<GameObject>("Planet").WaitForCompletion();
+        GameObject moon = Instantiate(MapManager.Instance.planetPrefab);
         planets.Add(moon);
         GameManager.Instance.Spawn(moon);
 
@@ -178,8 +214,7 @@ public class MapManager : NetworkBehaviour
         rp.rotationSpeed = parameters.rotationSpeed;
 
         //Place Planet to orbit of center star
-        Vector3 orbitPos = parentPlanet.transform.localPosition + PointOnUnitCircle() * orbitDistance;
-        orbitPos.y = (float) prng.NextDouble() * ss.planetRadius * 8f - ss.planetRadius * 4f;
+        Vector3 orbitPos = parentPlanet.transform.localPosition + PointOnUnitSphere() * orbitDistance;
         moon.transform.localPosition = orbitPos;
     }
 
@@ -201,6 +236,12 @@ public class MapManager : NetworkBehaviour
         }
         planets.Clear();
         planets = new();
+
+        foreach (GameObject gameObject in stations) {
+            SafeDestroy(gameObject);
+        }
+        stations.Clear();
+        stations = new();
         
         planetsToCreate = new();
         foreach (SystemSettings.PlanetSetting planetSetting in systemSettings.planetSettings) {
@@ -214,6 +255,7 @@ public class MapManager : NetworkBehaviour
             float distance = 0;
             for (int i = planetsToCreate.Count - 1; i >= 0; i--) {
                 AddPlanet(planetsToCreate[i], ref distance);
+                TryToAddSpaceStation(planetsToCreate[i], planets[planets.Count - 1], distance);
                 TryToAddMoon(planets[planets.Count - 1], planetsToCreate[i], planetsToCreate[i].maxMoonAmount, planets[planets.Count - 1].GetComponent<PlanetObject>().shapeSettings.planetRadius);
             }
         }
@@ -250,6 +292,22 @@ public class MapManager : NetworkBehaviour
     }
 
     //For offline config test
+    private void TryToAddSpaceStation(SystemSettings.PlanetSetting planetSetting, GameObject planet, float lastOrbitDistance) {
+        if (serverPrng.NextDouble() > planetSetting.stationCreateChance)
+            return;
+
+        //Create Planet game object
+        GameObject go = Instantiate(stationPrefab);
+        go.transform.parent = this.transform.GetChild(0).GetChild(1);
+
+        //Place Planet to orbit of center star
+        float planetRadius = planet.GetComponent<PlanetObject>().shapeSettings.planetRadius;
+        Vector3 orbitPos = planet.transform.localPosition + PointOnUnitSphere() * (planetRadius + (float) prng.NextDouble() * planetRadius / 4f + planetSetting.stationDistance);
+        go.transform.localPosition = orbitPos;
+        stations.Add(go);
+    }
+
+    //For offline config test
     private void TryToAddMoon(GameObject go, SystemSettings.PlanetSetting planetSetting, int availableMoonAmount, float distance) {
         if (availableMoonAmount == 0 || serverPrng.NextDouble() > planetSetting.moonCreateChance)
             return;
@@ -275,8 +333,7 @@ public class MapManager : NetworkBehaviour
         rp.rotationSpeed = new Vector3((float) serverPrng.NextDouble() * 4 - 2, (float) serverPrng.NextDouble() * 10 - 5, (float) serverPrng.NextDouble() * 4 - 2);
 
         //Place Moon to orbit of Planet
-        Vector3 orbitPos = go.transform.localPosition + PointOnUnitCircle() * distance;
-        orbitPos.y = (float) prng.NextDouble() * ss.planetRadius * 8f - ss.planetRadius * 4f;
+        Vector3 orbitPos = go.transform.localPosition + PointOnUnitSphere() * distance;
         moon.transform.localPosition = orbitPos;
         planets.Add(moon);
 
@@ -287,6 +344,12 @@ public class MapManager : NetworkBehaviour
     public Vector3 PointOnUnitCircle() {
         float angle = (float) prng.NextDouble() * Mathf.PI * 2;
         return Vector3.forward * Mathf.Sin(angle) + Vector3.right * Mathf.Cos(angle);
+    }
+
+    public Vector3 PointOnUnitSphere() {
+        float theta = (float) prng.NextDouble() * Mathf.PI * 2f;
+        float phi = (float) prng.NextDouble() * Mathf.PI * 2f;
+        return new Vector3(Mathf.Cos(theta) * Mathf.Sin(theta), Mathf.Sin(theta) * Mathf.Sin(phi), Mathf.Cos(phi)).normalized;
     }
 
     public void OnSystemSettingsUpdate() {

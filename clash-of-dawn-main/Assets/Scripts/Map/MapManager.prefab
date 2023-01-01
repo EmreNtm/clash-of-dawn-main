@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2536356804587449744
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 176499401048123920}
+  m_Layer: 0
+  m_Name: Stations
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &176499401048123920
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2536356804587449744}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5921969083513082450}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5921969081880773626
 GameObject:
   m_ObjectHideFlags: 0
@@ -458,11 +489,14 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: -1959291453279966782}
   _networkObjectCache: {fileID: -1959291453279966782}
   starManager: {fileID: 0}
+  planetPrefab: {fileID: 1038345663172935239, guid: a879e29461f527a45ac7d88a9f07b261, type: 3}
+  stationPrefab: {fileID: 5261155741893644985, guid: 49ef62f1ab961d340baf5837141da610, type: 3}
   systemSettings: {fileID: 11400000, guid: b61dc6e6edd03944584ae2eeb6ef567d, type: 2}
   planets:
   - {fileID: 0}
   - {fileID: 0}
   planetsToCreate: []
+  stations: []
 --- !u!1 &5921969082539589666
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,6 +685,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5921969083383605720}
+  - {fileID: 176499401048123920}
   m_Father: {fileID: 5921969082350682659}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

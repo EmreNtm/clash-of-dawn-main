@@ -56,11 +56,16 @@ public class MultiplayerShipController : NetworkBehaviour
         public Vector3 velocity;
         public Vector3 angularVelocity;
 
-        public ReconcileData(Vector3 _position, Quaternion _rotation, Vector3 _velocity, Vector3 _angularVelocity) {
+        public float thrustPercentage;
+        public float rollThrustPercentage;
+
+        public ReconcileData(Vector3 _position, Quaternion _rotation, Vector3 _velocity, Vector3 _angularVelocity, float _thrustPercentage, float _rollThrustPercentage) {
             position = _position;
             rotation = _rotation;
             velocity = _velocity;
             angularVelocity = _angularVelocity;
+            thrustPercentage = _thrustPercentage;
+            rollThrustPercentage = _rollThrustPercentage;
         }
     }
 
@@ -210,7 +215,7 @@ public class MultiplayerShipController : NetworkBehaviour
         if (isOffRollingLeft == true && Time.time > nextIsOffRollingLeftTime) {
             isOffRollingLeft = false;
         }
-        if (!Input.GetKey(KeyCode.A) && !isOffRollingLeft && (rollEngineActivePower > 0) && Time.time > nextIsOffRollingLeftTime) {
+        if (!Input.GetKey(KeyCode.A) && !isOffRollingLeft && (rollThrustPercentage > 0) && Time.time > nextIsOffRollingLeftTime) {
             isOffRollingLeft = true;
             runOffIsRollingLeft = true;
             nextIsOffRollingLeftTime = Time.time + 0.1f;
@@ -228,7 +233,7 @@ public class MultiplayerShipController : NetworkBehaviour
         if (isOffRollingRight == true && Time.time > nextIsOffRollingRightTime) {
             isOffRollingRight = false;
         }
-        if (!Input.GetKey(KeyCode.D) && !isOffRollingRight && (rollEngineActivePower < 0) && Time.time > nextIsOffRollingRightTime) {
+        if (!Input.GetKey(KeyCode.D) && !isOffRollingRight && (rollThrustPercentage < 0) && Time.time > nextIsOffRollingRightTime) {
             isOffRollingRight = true;
             runOffIsRollingRight = true;
             nextIsOffRollingRightTime = Time.time + 0.1f;
@@ -269,7 +274,8 @@ public class MultiplayerShipController : NetworkBehaviour
     //After fixed update
     private void TimeManager_OnPostTick() {
         if (base.IsServer) {
-            ReconcileData rd = new ReconcileData(transform.position, transform.rotation, shipRigidbody.velocity, shipRigidbody.angularVelocity);
+            ReconcileData rd = new ReconcileData(transform.position, transform.rotation, shipRigidbody.velocity, shipRigidbody.angularVelocity,
+                thrustPercentage, rollThrustPercentage);
             Reconciliation(rd, true);
         }
     }
@@ -288,11 +294,11 @@ public class MultiplayerShipController : NetworkBehaviour
 
     [Replicate]
     private void Move(MoveData md, bool asServer, bool replaying = false) {
-        CalculateEnginePower(md);
+        CalculateEnginePower(md, asServer);
         AimShip(md);
     }
 
-    private void CalculateEnginePower(MoveData md) {
+    private void CalculateEnginePower(MoveData md, bool asServer) {
         if (md.runThrottle) {
             if (thrustPercentage + 0.1f < 1) {
                 thrustPercentage += 0.1f;
@@ -417,6 +423,8 @@ public class MultiplayerShipController : NetworkBehaviour
         transform.rotation = rd.rotation;
         shipRigidbody.velocity = rd.velocity;
         shipRigidbody.angularVelocity = rd.angularVelocity;
+        thrustPercentage = rd.thrustPercentage;
+        rollThrustPercentage = rd.rollThrustPercentage;
     }
 
     private (bool success, Vector3 position) GetMousePosition() {

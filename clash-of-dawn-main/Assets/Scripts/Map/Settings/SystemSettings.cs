@@ -15,6 +15,10 @@ public class SystemSettings : ScriptableObject
     public struct PlanetSetting {
         public MapManager.PlanetType type;
 
+        [Range(0f, 1f)]
+        public float stationCreateChance;
+        public float stationDistance;
+
         public ShapeSettings shapeSettings;
         public ColorSettings colorSettings;
 

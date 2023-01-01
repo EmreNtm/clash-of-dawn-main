@@ -11,6 +11,9 @@ public class RotatePlanet : NetworkBehaviour
 
     [Server]
     void FixedUpdate() {
+        if (!IsOwner)
+            return;
+
         if (!IsServer)
             return;
 
