@@ -261,8 +261,9 @@ public class MultiplayerShipController : NetworkBehaviour
 
     //Before fixed update
     private void TimeManager_OnTick() {
+        Reconciliation(default, false);
         if (base.IsOwner) {
-            Reconciliation(default, false);
+            //Reconciliation(default, false);
             CheckInput(out MoveData md);
             Move(md, false);
         }
@@ -274,6 +275,9 @@ public class MultiplayerShipController : NetworkBehaviour
     //After fixed update
     private void TimeManager_OnPostTick() {
         if (base.IsServer) {
+            //ReconcileData rd = new ReconcileData(GameManager.Instance.GetRealLocation(transform), transform.rotation, shipRigidbody.velocity, shipRigidbody.angularVelocity,
+            //    thrustPercentage, rollThrustPercentage);
+
             ReconcileData rd = new ReconcileData(transform.position, transform.rotation, shipRigidbody.velocity, shipRigidbody.angularVelocity,
                 thrustPercentage, rollThrustPercentage);
             Reconciliation(rd, true);
@@ -419,7 +423,11 @@ public class MultiplayerShipController : NetworkBehaviour
 
     [Reconcile]
     private void Reconciliation(ReconcileData rd, bool asServer) {
-        transform.position = rd.position;
+        //Debug.Log(rd.position - GameManager.Instance.totalShift);
+        //Sorun burda
+        //transform.position = rd.position + GameManager.Instance.totalShift;
+
+        //transform.position = rd.position;
         transform.rotation = rd.rotation;
         shipRigidbody.velocity = rd.velocity;
         shipRigidbody.angularVelocity = rd.angularVelocity;

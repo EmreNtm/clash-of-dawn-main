@@ -20,6 +20,9 @@ public sealed class GameManager : NetworkBehaviour
     [SyncVar]
     public bool canStart;
 
+    private readonly float sqrShiftMagnitude = 20000 * 20000;
+    public Vector3 totalShift = Vector3.zero;
+
     private void Awake() {
         Instance = this;
     }
@@ -27,9 +30,36 @@ public sealed class GameManager : NetworkBehaviour
     private void Update() {
         if (!IsServer)
             return;
-
+        
         canStart = players.All(player => player.isReady);
     }
+
+    // private void FixedUpdate() {
+    //     if (PlayerData.Instance == null || PlayerData.Instance.playerShip == null)
+    //         return;
+
+    //     if (PlayerData.Instance.playerShip.transform.position.sqrMagnitude > sqrShiftMagnitude) {
+    //         Debug.Log("shifted, " + PlayerData.Instance.name);
+    //         Vector3 shiftVector = -PlayerData.Instance.playerShip.transform.position;
+    //         ShiftOrigin(shiftVector);
+    //         totalShift += shiftVector;
+    //         foreach (PlayerData pd in GameManager.Instance.players) {
+    //             if (pd != PlayerData.Instance) {
+    //                 pd.playerShip.GetComponent<OriginShiftPositionHandler>().TargetSetOffsetVector(pd.Owner, totalShift);
+    //             }
+    //         }
+    //         //Debug.Break();
+    //     }
+    // }
+
+    // public Vector3 GetRealLocation(Transform transform) {
+    //     return transform.position - totalShift;
+    // }
+
+    // private void ShiftOrigin(Vector3 shiftVector) {
+    //     MapManager.Instance.transform.position += shiftVector;
+    //     PlayerData.Instance.playerShip.transform.position += shiftVector;
+    // }
 
     [Server]
     public void StartGame() {

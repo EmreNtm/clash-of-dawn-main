@@ -28,6 +28,7 @@ public sealed class PlayerData : NetworkBehaviour
 
     [SyncVar]
     public GameObject playerShip;
+    public string name;
 
     //Called on server
     public override void OnStartServer() {
@@ -44,6 +45,7 @@ public sealed class PlayerData : NetworkBehaviour
             return;
 
         Instance = this;
+        name = IsServer.ToString();
 
         ViewManager.Instance.Initialize();
     }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d9bc6f7e844f1a4da57a70b501c64a8, type: 3}
   m_Name: DefaultSystemSettings
   m_EditorClassIdentifier: 
-  seed: 1436
+  seed: 44617
   borderRadius: 0
   increasePlanetOrbitDistance: 50000
   increaseMoonOrbitDistance: 5000
