@@ -7,6 +7,12 @@ public class PlanetObject : MonoBehaviour
 
     public ShapeSettings shapeSettings;
     public ColorSettings colorSettings;
+    [HideInInspector]
+    public SystemSettings.PlanetSetting planetSetting;
+    [HideInInspector]
+    public bool isMoon = false;
+    [HideInInspector]
+    public GameObject parentPlanet;
 
     [Range(2, 128)]
     public int resolution = 5;

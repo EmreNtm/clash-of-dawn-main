@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4372104181756969730}
   - component: {fileID: 417767223852578361}
   - component: {fileID: -2472245137900091143}
+  - component: {fileID: 6394703917291525525}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -51,6 +52,7 @@ MonoBehaviour:
   <ComponentIndex>k__BackingField: 0
   _networkBehaviours:
   - {fileID: 417767223852578361}
+  - {fileID: -2472245137900091143}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
@@ -79,6 +81,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shapeSettings: {fileID: 11400000, guid: 4bf0d1699daee264a9a51792d2da24b4, type: 2}
   colorSettings: {fileID: 11400000, guid: b6fd2d018badc624a920c808f030019c, type: 2}
+  planetSetting:
+    type: 0
+    stationCreateChance: 0
+    stationDistance: 0
+    shapeSettings: {fileID: 0}
+    colorSettings: {fileID: 0}
+    resolution: 0
+    borderRadius: 0
+    minMaxSize: {x: 0, y: 0}
+    minMaxAmount: {x: 0, y: 0}
+    moonShapeSettings: {fileID: 0}
+    moonColorSettings: {fileID: 0}
+    maxMoonAmount: 0
+    moonCreateChance: 0
+    moonMinMaxSize: {x: 0, y: 0}
+    moonResolution: 0
   resolution: 128
   autoUpdate: 0
   renderOptions: 0
@@ -110,9 +128,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
+  _componentIndexCache: 1
   _addedNetworkObject: {fileID: 5674881570410003041}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 5674881570410003041}
   _synchronizeParent: 0
   _packing:
     Position: 1
@@ -140,3 +158,15 @@ MonoBehaviour:
     X: 0
     Y: 0
     Z: 0
+--- !u!114 &6394703917291525525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1038345663172935239}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b698d7bf8aa3eab4d904aa82293c0ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

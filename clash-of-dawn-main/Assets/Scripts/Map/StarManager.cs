@@ -26,6 +26,13 @@ public class StarManager : MonoBehaviour
         // mat.SetTexture("_Spectrum", spectrum);
     }
 
+    private void FixedUpdate() {
+        if (PlayerData.Instance == null || PlayerData.Instance.playerShip == null)
+            return;
+
+        transform.position = PlayerData.Instance.playerShip.transform.position;
+    }
+
     public void CreateStars() {
         GenerateMesh();
         TextureFromGradient(color, 64, ref spectrum);

@@ -47,14 +47,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <IsNested>k__BackingField: 0
   <ComponentIndex>k__BackingField: 0
-  _networkBehaviours: []
+  _networkBehaviours:
+  - {fileID: 1886780617524782362}
+  - {fileID: 0}
+  - {fileID: 0}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
   _isGlobal: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: -1
+  <PrefabId>k__BackingField: 4
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 7807759643866311769
@@ -72,9 +75,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c706b6e6bccd654f98fcf3e4ec0955a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
+  _componentIndexCache: 0
   _addedNetworkObject: {fileID: 901882500455130712}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 901882500455130712}
   username: 
   isReady: 0
   <score>k__BackingField: 0
+  playerShip: {fileID: 0}
+  name: 

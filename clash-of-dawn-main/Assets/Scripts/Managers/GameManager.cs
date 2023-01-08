@@ -20,7 +20,7 @@ public sealed class GameManager : NetworkBehaviour
     [SyncVar]
     public bool canStart;
 
-    private readonly float sqrShiftMagnitude = 20000 * 20000;
+    //private readonly float sqrShiftMagnitude = 20000 * 20000;
     public Vector3 totalShift = Vector3.zero;
 
     private void Awake() {

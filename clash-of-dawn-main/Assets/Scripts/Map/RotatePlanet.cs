@@ -9,10 +9,9 @@ public class RotatePlanet : NetworkBehaviour
     public Vector3 rotationSpeed;
     private Vector3 timedRotation;
 
-    [Server]
     void FixedUpdate() {
-        if (!IsOwner)
-            return;
+        //if (!IsOwner)
+        //    return;
 
         if (!IsServer)
             return;
