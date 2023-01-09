@@ -17,6 +17,10 @@ public class SystemEditor : Editor
             mapManager.CreateOfflineSystem();
         }
 
+        if (GUILayout.Button("Reset Lists")) {
+            mapManager.ResetLists();
+        }
+
         DrawSettingsEditor(mapManager.systemSettings, mapManager.OnSystemSettingsUpdate, ref systemSettingsEditor);
     }
 

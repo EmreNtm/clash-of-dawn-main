@@ -14,6 +14,12 @@ public class PlanetObject : MonoBehaviour
     [HideInInspector]
     public GameObject parentPlanet;
 
+    public float orbitDistance;
+    [HideInInspector]
+    public List<GameObject> moons = new();
+    [HideInInspector]
+    public bool serverMoonListFlag = false;
+
     [Range(2, 128)]
     public int resolution = 5;
     public bool autoUpdate = false;
