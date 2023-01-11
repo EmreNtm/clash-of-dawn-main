@@ -100,6 +100,16 @@ public class MapManager : NetworkBehaviour
             foreach (PlayerData pd in GameManager.Instance.players) {
                 TargetCreateStars(pd.Owner, planets[planets.Count - 1].GetComponent<PlanetObject>().orbitDistance);
             }
+
+            if (IsHost)
+                TargetClearPlanetCopies(PlayerData.Instance.Owner);
+        }
+    }
+
+    [TargetRpc]
+    private void TargetClearPlanetCopies(NetworkConnection conn) {
+        for (int i = planets.Count / 2 - 1; i >= 0; i--) {
+            planets.RemoveAt(i);
         }
     }
 

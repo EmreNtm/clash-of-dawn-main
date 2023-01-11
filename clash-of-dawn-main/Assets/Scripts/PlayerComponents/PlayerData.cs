@@ -28,7 +28,17 @@ public sealed class PlayerData : NetworkBehaviour
 
     [SyncVar]
     public GameObject playerShip;
-    public string name;
+
+    public struct EventInfos {
+
+        public float asteroidEventReadyTime;
+        public float EnemyShipEventReadyTime;
+        public bool isHavingAsteroidEvent;
+        public bool isHavingEnemyShipEvent;
+
+    }
+
+    public EventInfos eventInfos;
 
     //Called on server
     public override void OnStartServer() {
@@ -80,6 +90,12 @@ public sealed class PlayerData : NetworkBehaviour
         GameObject shipInstance = Instantiate(GameManager.Instance.shipPrefab);
         Spawn(shipInstance, Owner);
         playerShip = shipInstance;
+
+        eventInfos = new EventInfos();
+        eventInfos.asteroidEventReadyTime = Time.time + EventManager.Instance.AsteroidEventStartingCooldown;
+        eventInfos.EnemyShipEventReadyTime = Time.time + EventManager.Instance.EnemyShipEventStartingCooldown;
+        eventInfos.isHavingAsteroidEvent = false;
+        eventInfos.isHavingEnemyShipEvent = false;
     }
 
     //Server calls this

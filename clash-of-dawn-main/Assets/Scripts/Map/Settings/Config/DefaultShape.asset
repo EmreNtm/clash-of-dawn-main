@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ca01fb91665b7e489d08ac2b4c7a81c, type: 3}
   m_Name: DefaultShape
   m_EditorClassIdentifier: 
-  planetRadius: 400
+  planetRadius: 20
   noiseData:
     noiseLayers:
     - isEnabled: 1
@@ -23,7 +23,7 @@ MonoBehaviour:
       lacunarity: 6
       heightMultiplier: 0.02
       scale: 0.8
-      seed: 113
+      seed: -13317
       offset: {x: 0, y: 0, z: 0}
       noiseSubValue: 0.7
     - isEnabled: 1
@@ -34,7 +34,7 @@ MonoBehaviour:
       lacunarity: 1.5
       heightMultiplier: 0.14
       scale: 0.8
-      seed: 0
+      seed: -13317
       offset: {x: 0, y: 0, z: 0}
       noiseSubValue: 0
     noiseConfigs:
@@ -43,13 +43,13 @@ MonoBehaviour:
       lacunarity: 6
       heightMultiplier: 0.02
       scale: 0.8
-      seed: 113
+      seed: -13317
       offset: {x: 0, y: 0, z: 0}
       octaveOffsets:
-      - {x: 52060, y: 94725, z: 50733}
-      - {x: 35442, y: -55216, z: -38133}
-      - {x: 7286, y: -73497, z: 91507}
-      - {x: 88515, y: 8491, z: 37609}
+      - {x: 72830, y: -45389, z: -61782}
+      - {x: 95533, y: 28325, z: -48805}
+      - {x: 35413, y: -25326, z: 2569}
+      - {x: 86414, y: -33531, z: -51684}
       noiseSubValue: 0.7
       filterMode: 0
     - octaves: 4
@@ -57,12 +57,12 @@ MonoBehaviour:
       lacunarity: 1.5
       heightMultiplier: 0.14
       scale: 0.8
-      seed: 0
+      seed: -13317
       offset: {x: 0, y: 0, z: 0}
       octaveOffsets:
-      - {x: 45248, y: 63465, z: 53604}
-      - {x: 11632, y: -58794, z: 11776}
-      - {x: 81205, y: -11565, z: 95509}
-      - {x: -45260, y: -41619, z: -6538}
+      - {x: 72830, y: -45389, z: -61782}
+      - {x: 95533, y: 28325, z: -48805}
+      - {x: 35413, y: -25326, z: 2569}
+      - {x: 86414, y: -33531, z: -51684}
       noiseSubValue: 0
       filterMode: 0
