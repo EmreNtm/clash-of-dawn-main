@@ -92,7 +92,7 @@ public sealed class PlayerData : NetworkBehaviour
         playerShip = shipInstance;
 
         eventInfos = new EventInfos();
-        eventInfos.asteroidEventReadyTime = Time.time + EventManager.Instance.AsteroidEventStartingCooldown;
+        eventInfos.asteroidEventReadyTime = Time.time + EventManager.Instance.asteroidEventSetting.eventStartingCooldown;
         eventInfos.EnemyShipEventReadyTime = Time.time + EventManager.Instance.EnemyShipEventStartingCooldown;
         eventInfos.isHavingAsteroidEvent = false;
         eventInfos.isHavingEnemyShipEvent = false;

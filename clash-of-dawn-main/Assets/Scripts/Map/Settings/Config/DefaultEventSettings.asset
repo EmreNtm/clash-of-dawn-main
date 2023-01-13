@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d912f61575c48841977b583d5229609, type: 3}
+  m_Name: DefaultEventSettings
+  m_EditorClassIdentifier: 
+  eventCheckInterval: 60
+  asteroidEventSetting:
+    eventChance: 1
+    eventCooldown: 15
+    eventStartingCooldown: 15
+    eventInvolvedPlayersRadius: 100
+    eventPrefab: {fileID: 8856843854371309304, guid: 137353ef46aaa5d40be63d050ef1b47b, type: 3}
+    asteroidPrefab: {fileID: 1038345663172935239, guid: f50a40be3adc16f4dbff368a372d9aa5, type: 3}
+    minMaxAsteroidSize: {x: 5, y: 50}
+    asteroidAmount: 50
+    borderRadius: 2000
+    borderThickness: 500
+    duration: 30

@@ -9,24 +9,43 @@ public class EventManager : NetworkBehaviour
     
     public static EventManager Instance { get; private set; }
 
-    // Carry these to game settings.
-    public float AsteroidEventChance = 0.1f;
-    public float AsteroidEventCooldown = 300f;
-    public float AsteroidEventStartingCooldown = 30;
-    public float AsteroidEventInvolvedPlayersRadius = 100f;
-    public GameObject asteroidEventPrefab;
-
     public float EnemyShipEventChance = 0.1f;
     public float EnemyShipEventStartingCooldown = 60f;
 
+    public EventSettings eventSettings;
+    [HideInInspector]
+    public EventSettings.AsteroidEventSetting asteroidEventSetting;
+
+    private List<GameObject> asteroidEvents;
+
+    private float eventCheckCounter;
+
     private void Awake() {
         Instance = this;
+        eventCheckCounter = Time.time;
+        asteroidEventSetting = eventSettings.asteroidEventSetting;
+        asteroidEvents = new();
     }
 
-    private void FixedUpdate() {
+    private bool temp = false;
+    private GameObject tempObject;
+    private void Update() {
         if (!IsServer)
             return;
 
+        if (GameManager.Instance.started && !temp && Input.GetKeyDown(KeyCode.R)) {
+            tempObject = StartAsteroidEvent(PlayerData.Instance);
+            temp = !temp;
+        } else if (GameManager.Instance.started && temp && Input.GetKeyDown(KeyCode.R)) {
+            tempObject.GetComponent<AsteroidEvent>().EndAsteroidEvent();
+            temp = !temp;
+        }
+        return;
+
+        if (Time.time < eventCheckCounter)
+            return;
+        
+        eventCheckCounter = Time.time + eventSettings.eventCheckInterval;
         foreach (PlayerData pd in GameManager.Instance.players) {
             if (IsReadyForAsteroidEvent(pd))
                 StartAsteroidEvent(pd);
@@ -45,7 +64,7 @@ public class EventManager : NetworkBehaviour
             return false;
 
         // Check the event chance
-        if (Random.Range(0f, 1f) > AsteroidEventChance)
+        if (Random.Range(0f, 1f) > asteroidEventSetting.eventChance)
             return false;
 
         // Check if player is already having an event
@@ -71,23 +90,23 @@ public class EventManager : NetworkBehaviour
         return true;
     }
 
-    private void StartAsteroidEvent(PlayerData pd) {
+    private GameObject StartAsteroidEvent(PlayerData pd) {
         Vector3 eventPosition = pd.playerShip.transform.position;
 
-        // pd.eventInfos.asteroidEventReadyTime = Time.time + 300f;
-        // pd.eventInfos.isHavingAsteroidEvent = true;
-
-        GameObject eventObject = Instantiate(asteroidEventPrefab);
+        GameObject eventObject = Instantiate(asteroidEventSetting.eventPrefab);
         Spawn(eventObject);
-        float sqrRadius = AsteroidEventInvolvedPlayersRadius;
+        asteroidEvents.Add(eventObject);
+        float sqrRadius = asteroidEventSetting.eventInvolvedPlayersRadius;
         sqrRadius *= sqrRadius;
         foreach (PlayerData playerData in GameManager.Instance.players) {
+            TargetStartAsteroidEvent(playerData.Owner, eventObject, eventPosition);
             if (Vector3.SqrMagnitude(playerData.playerShip.transform.position - eventPosition) < sqrRadius) {
-                TargetStartAsteroidEvent(playerData.Owner, eventObject, eventPosition);
                 playerData.eventInfos.isHavingAsteroidEvent = true;
                 eventObject.GetComponent<AsteroidEvent>().involvedPlayers.Add(playerData);
             }
         }
+
+        return eventObject;
     }
 
     [TargetRpc]

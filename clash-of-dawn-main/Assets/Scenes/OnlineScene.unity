@@ -535,10 +535,15 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 520006535}
   _networkObjectCache: {fileID: 520006535}
-  AsteroidEventChance: 1
-  AsteroidEventCooldown: 300
-  asteroidEventPrefab: {fileID: 8856843854371309304, guid: 137353ef46aaa5d40be63d050ef1b47b, type: 3}
   EnemyShipEventChance: 0.1
+  EnemyShipEventStartingCooldown: 60
+  eventSettings: {fileID: 11400000, guid: b7217282a3a3b2140b67441a77104610, type: 2}
+  asteroidEventSetting:
+    eventChance: 0
+    eventCooldown: 0
+    eventStartingCooldown: 0
+    eventInvolvedPlayersRadius: 0
+    eventPrefab: {fileID: 0}
 --- !u!114 &520006535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -754,6 +759,7 @@ MonoBehaviour:
   mapManagerPrefab: {fileID: 5921969082350682657, guid: 474fc46cdb708064a80add29662fae47, type: 3}
   shipPrefab: {fileID: 1484421572893219048, guid: b04c0e2a488a44c47bd994eb5554ae9e, type: 3}
   canStart: 0
+  started: 0
 --- !u!114 &563816483
 MonoBehaviour:
   m_ObjectHideFlags: 0

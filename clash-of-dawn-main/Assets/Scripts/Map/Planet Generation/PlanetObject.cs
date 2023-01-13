@@ -72,6 +72,8 @@ public class PlanetObject : MonoBehaviour
             meshFilters[i].gameObject.SetActive(renderOptions == RenderOptions.All ||  (int) renderOptions - 1 == i);
         }
 
+        SphereCollider spherec = this.gameObject.AddComponent<SphereCollider>();
+
         shapeSettings.noiseData.noiseConfigs = new Noise.NoiseConfig[shapeSettings.noiseData.noiseLayers.Length];
         for (int i = 0; i < shapeSettings.noiseData.noiseConfigs.Length; i++) {
             shapeSettings.noiseData.noiseConfigs[i] = new Noise.NoiseConfig(shapeSettings.noiseData.noiseLayers[i]);
@@ -89,6 +91,8 @@ public class PlanetObject : MonoBehaviour
         foreach (MeshFilter mf in meshFilters) {
             SetMeshData(mf.sharedMesh, resolution, directions[i++], shapeSettings);
         }
+
+        this.gameObject.GetComponent<SphereCollider>().radius = shapeSettings.planetRadius + maxHeight;
 
         //Give planetMat min & max height
         UpdatePlanetMaterial();

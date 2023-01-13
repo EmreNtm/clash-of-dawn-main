@@ -6,12 +6,8 @@ using FishNet.Connection;
 
 public class AsteroidEvent : NetworkBehaviour
 {
-    
-    // buna public event settings lazım.
-    public GameObject asteroidPrefab;
-    public int asteroidAmount;
-    public float borderRadius;
-    public float duration;
+
+    private EventSettings.AsteroidEventSetting asteroidEventSetting;
 
     [HideInInspector]
     public float startTime;
@@ -23,22 +19,22 @@ public class AsteroidEvent : NetworkBehaviour
     [HideInInspector]
     public List<PlayerData> involvedPlayers = new();
 
+    private float sqrEventBorder;
+
     private void Awake() {
         startTime = Time.time;
         asteroids = new();
+        asteroidEventSetting = EventManager.Instance.eventSettings.asteroidEventSetting;
+        sqrEventBorder = asteroidEventSetting.borderRadius + asteroidEventSetting.borderThickness;
+        sqrEventBorder *= sqrEventBorder;
     }
 
     private void Start() {
         if (!IsServer)
             return;
 
-        GameObject asteroid;
-        for (int i = 0; i < asteroidAmount; i++) {
-            asteroid = Instantiate(asteroidPrefab);
-            Spawn(asteroid);
-            foreach (PlayerData pd in GameManager.Instance.players) {
-                TargetSpawnAsteroid(pd.Owner, asteroid);
-            }
+        for (int i = 0; i < asteroidEventSetting.asteroidAmount; i++) {
+            SpawnAsteroid();
         }
     }
 
@@ -47,26 +43,72 @@ public class AsteroidEvent : NetworkBehaviour
             return;
 
         // Time condition to end event
-        if (Time.time > startTime + duration) {
-            foreach (PlayerData pd in involvedPlayers) {
-                pd.eventInfos.asteroidEventReadyTime = Time.time + 30f;
-                pd.eventInfos.isHavingAsteroidEvent = false;
-            }
+        if (false && Time.time > startTime + asteroidEventSetting.duration) {
+            EndAsteroidEvent();
+            return;
+        }
 
-            foreach (GameObject asteroid in asteroids) {
+        GameObject asteroid;
+        for (int i = asteroids.Count - 1; i >= 0; i--) {
+            asteroid = asteroids[i];
+            if (Vector3.SqrMagnitude(asteroid.transform.position - transform.position) > sqrEventBorder) {
                 asteroid.GetComponent<NetworkObject>().Despawn();
+                asteroids.RemoveAt(i);
+                SpawnAsteroid();
+                Debug.Log("Destroyed!");
             }
-            Despawn();
-            Debug.Log("Asteroid Event is Over!");
+        }
+    }
+
+    private void SpawnAsteroid() {
+        GameObject asteroid = Instantiate(asteroidEventSetting.asteroidPrefab);
+        Spawn(asteroid);
+
+        int shapeSettingsSeed = MapManager.serverPrng.Next(-100000, 100000);
+
+        foreach (PlayerData pd in GameManager.Instance.players) {
+            TargetSpawnAsteroid(pd.Owner, asteroid, shapeSettingsSeed);
         }
     }
 
     [TargetRpc]
-    private void TargetSpawnAsteroid(NetworkConnection conn, GameObject asteroid) {
+    private void TargetSpawnAsteroid(NetworkConnection conn, GameObject asteroid, int seed) {
         asteroid.transform.parent = transform.GetChild(0);
-        asteroid.GetComponent<PlanetObject>().CreatePlanet();
-        asteroid.transform.position = transform.position + MapManager.Instance.PointOnUnitSphere() * 25f;
+
+        PlanetObject po = asteroid.GetComponent<PlanetObject>();
+        po.autoUpdate = false;
+        ShapeSettings ss = new ShapeSettings(po.shapeSettings, seed);
+        ss.planetRadius = asteroidEventSetting.minMaxAsteroidSize.x + (float) MapManager.prng.NextDouble() * (asteroidEventSetting.minMaxAsteroidSize.y - asteroidEventSetting.minMaxAsteroidSize.x);
+        po.shapeSettings = ss;
+        po.CreatePlanet();
+
+        float offset =((float) MapManager.prng.NextDouble() * 2 * asteroidEventSetting.borderThickness - asteroidEventSetting.borderThickness);
+        asteroid.transform.position = transform.position + MapManager.Instance.PointOnUnitSphere() * (asteroidEventSetting.borderRadius + offset);
+        
+        Vector3 velocity = (transform.position - asteroid.transform.position).normalized;
+        asteroid.transform.rotation = Quaternion.LookRotation(velocity, asteroid.transform.up);
+
+        velocity = Quaternion.AngleAxis(((float) MapManager.prng.NextDouble() * 10f - 5f), asteroid.transform.up) * velocity;
+        velocity = Quaternion.AngleAxis(((float) MapManager.prng.NextDouble() * 10f - 5f), asteroid.transform.right) * velocity;
+        Rigidbody rb = asteroid.GetComponent<Rigidbody>();
+        rb.velocity = velocity * ((float) MapManager.prng.NextDouble() * 240f - 120f);
+        rb.angularVelocity = new Vector3(((float) MapManager.prng.NextDouble() * 5 - 2.5f), ((float) MapManager.prng.NextDouble() * 5 - 2.5f), 
+                ((float) MapManager.prng.NextDouble() * 5f - 2.5f));
+
         asteroids.Add(asteroid);
+    }
+
+    public void EndAsteroidEvent() {
+        foreach (PlayerData pd in involvedPlayers) {
+            pd.eventInfos.asteroidEventReadyTime = Time.time + 30f;
+            pd.eventInfos.isHavingAsteroidEvent = false;
+        }
+
+        foreach (GameObject asteroid in asteroids) {
+            asteroid.GetComponent<NetworkObject>().Despawn();
+        }
+        Despawn();
+        Debug.Log("Asteroid Event is Over!");
     }
 
 }

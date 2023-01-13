@@ -261,9 +261,8 @@ public class MultiplayerShipController : NetworkBehaviour
 
     //Before fixed update
     private void TimeManager_OnTick() {
-        Reconciliation(default, false);
         if (base.IsOwner) {
-            //Reconciliation(default, false);
+            Reconciliation(default, false);
             CheckInput(out MoveData md);
             Move(md, false);
         }
@@ -427,7 +426,7 @@ public class MultiplayerShipController : NetworkBehaviour
         //Sorun burda
         //transform.position = rd.position + GameManager.Instance.totalShift;
 
-        //transform.position = rd.position;
+        transform.position = rd.position;
         transform.rotation = rd.rotation;
         shipRigidbody.velocity = rd.velocity;
         shipRigidbody.angularVelocity = rd.angularVelocity;
