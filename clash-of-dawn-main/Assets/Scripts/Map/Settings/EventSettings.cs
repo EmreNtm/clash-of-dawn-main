@@ -26,4 +26,21 @@ public class EventSettings : ScriptableObject
     }
     public AsteroidEventSetting asteroidEventSetting;
 
+    [System.Serializable]
+    public struct EnemyShipEventSetting {
+        [Range(0f, 1f)]
+        public float eventChance;
+        public float eventCooldown;
+        public float eventStartingCooldown;
+        public float eventInvolvedPlayersRadius;
+        public GameObject eventPrefab;
+
+        public GameObject enemyShipPrefab;
+        public Vector2 minMaxEnemyAmount;
+        public float borderRadius;
+        public float borderThickness;
+        public float duration;
+    }
+    public EnemyShipEventSetting enemyShipEventSetting;
+
 }

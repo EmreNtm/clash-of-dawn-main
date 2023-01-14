@@ -27,6 +27,7 @@ public class SystemSettings : ScriptableObject
         [Range(2, 256)]
         public int resolution;
         public float borderRadius;
+        public float eventBorderRadius;
         public Vector2 minMaxSize;
         public Vector2 minMaxAmount;
 

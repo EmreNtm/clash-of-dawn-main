@@ -15,8 +15,11 @@ public class EventManager : NetworkBehaviour
     public EventSettings eventSettings;
     [HideInInspector]
     public EventSettings.AsteroidEventSetting asteroidEventSetting;
-
     private List<GameObject> asteroidEvents;
+
+    [HideInInspector]
+    public EventSettings.EnemyShipEventSetting enemyShipEventSetting;
+    private List<GameObject> enemyShipEvents;
 
     private float eventCheckCounter;
 
@@ -25,6 +28,9 @@ public class EventManager : NetworkBehaviour
         eventCheckCounter = Time.time;
         asteroidEventSetting = eventSettings.asteroidEventSetting;
         asteroidEvents = new();
+
+        enemyShipEventSetting = eventSettings.enemyShipEventSetting;
+        enemyShipEvents = new();
     }
 
     public bool temp = false;
@@ -35,18 +41,18 @@ public class EventManager : NetworkBehaviour
 
         // Event start with R key for testing.
         if (GameManager.Instance.started && !temp && Input.GetKeyDown(KeyCode.R)) {
-            tempObject = StartAsteroidEvent(PlayerData.Instance);
+            tempObject = StartEnemyShipEvent(PlayerData.Instance);
             temp = !temp;
         } else if (GameManager.Instance.started && temp && Input.GetKeyDown(KeyCode.R)) {
-            tempObject.GetComponent<AsteroidEvent>().EndAsteroidEvent();
+            tempObject.GetComponent<EnemyShipEvent>().EndEnemyShipEvent();
             temp = !temp;
         }
         return;
 
         if (Time.time < eventCheckCounter)
             return;
-        
         eventCheckCounter = Time.time + eventSettings.eventCheckInterval;
+
         foreach (PlayerData pd in GameManager.Instance.players) {
             if (IsReadyForAsteroidEvent(pd))
                 StartAsteroidEvent(pd);
@@ -79,11 +85,11 @@ public class EventManager : NetworkBehaviour
 
         // Check if position is ready;
         foreach (GameObject planet in MapManager.Instance.planets) {
-            if (IsInPlanetBorders(pd, planet))
+            if (IsInPlanetEventBorders(pd, planet))
                 return false;
             
             foreach (GameObject moon in planet.GetComponent<PlanetObject>().moons) {
-                if (IsInPlanetBorders(pd, planet))
+                if (IsInPlanetEventBorders(pd, planet))
                     return false;
             }
         }
@@ -123,15 +129,39 @@ public class EventManager : NetworkBehaviour
         return false;
     }
 
-    private void StartEnemyShipEvent(PlayerData pd) {
+    private GameObject StartEnemyShipEvent(PlayerData pd) {
+        Vector3 eventPosition = pd.playerShip.transform.position;
 
+        GameObject eventObject = Instantiate(enemyShipEventSetting.eventPrefab);
+        Spawn(eventObject);
+        eventObject.transform.position = eventPosition;
+        enemyShipEvents.Add(eventObject);
+        float sqrRadius = enemyShipEventSetting.eventInvolvedPlayersRadius;
+        sqrRadius *= sqrRadius;
+        foreach (PlayerData playerData in GameManager.Instance.players) {
+            TargetStartEnemyShipEvent(playerData.Owner, eventObject, eventPosition);
+            if (Vector3.SqrMagnitude(playerData.playerShip.transform.position - eventPosition) < sqrRadius) {
+                playerData.eventInfos.isHavingEnemyShipEvent = true;
+                eventObject.GetComponent<EnemyShipEvent>().involvedPlayers.Add(playerData);
+            }
+        }
+
+        return eventObject;
     }
 
-    private bool IsInPlanetBorders(PlayerData pd, GameObject planet) {
+    [TargetRpc]
+    private void TargetStartEnemyShipEvent(NetworkConnection conn, GameObject eventObject, Vector3 eventPosition) {
+        eventObject.transform.parent = transform;
+        eventObject.transform.position = eventPosition;
+
+        Debug.Log("EnemyShip Event Started!");
+    }
+
+    private bool IsInPlanetEventBorders(PlayerData pd, GameObject planet) {
         PlanetObject po = planet.GetComponent<PlanetObject>();
         GameObject ship = pd.playerShip;
 
-        float sqrDistance = po.shapeSettings.planetRadius + po.planetSetting.borderRadius;
+        float sqrDistance = po.shapeSettings.planetRadius + po.planetSetting.eventBorderRadius;
         sqrDistance *= sqrDistance;
 
         if (Vector3.SqrMagnitude(po.transform.position - ship.transform.position) < sqrDistance)

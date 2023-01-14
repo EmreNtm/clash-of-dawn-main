@@ -43,14 +43,14 @@ public class AsteroidEvent : NetworkBehaviour
             return;
 
         // Time condition to end event
-        if (false && Time.time > startTime + asteroidEventSetting.duration) {
+        if (Time.time > startTime + asteroidEventSetting.duration) {
             EndAsteroidEvent();
             return;
         }
 
         if (Time.time > startTime + 5f && asteroids.Count == 0) {
             EndAsteroidEvent();
-            EventManager.Instance.temp = !EventManager.Instance.temp;
+            // EventManager.Instance.temp = !EventManager.Instance.temp;
             return;
         }
 

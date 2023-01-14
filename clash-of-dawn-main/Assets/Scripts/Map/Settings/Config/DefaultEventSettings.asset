@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventCheckInterval: 60
   asteroidEventSetting:
-    eventChance: 1
+    eventChance: 0
     eventCooldown: 15
     eventStartingCooldown: 15
     eventInvolvedPlayersRadius: 100
@@ -22,6 +22,17 @@ MonoBehaviour:
     asteroidPrefab: {fileID: 1038345663172935239, guid: f50a40be3adc16f4dbff368a372d9aa5, type: 3}
     minMaxAsteroidSize: {x: 5, y: 50}
     asteroidAmount: 50
+    borderRadius: 2000
+    borderThickness: 500
+    duration: 30
+  enemyShipEventSetting:
+    eventChance: 1
+    eventCooldown: 15
+    eventStartingCooldown: 15
+    eventInvolvedPlayersRadius: 100
+    eventPrefab: {fileID: 2360468314249387116, guid: 52e688bc2db309c4b9a7c1d0ae38354f, type: 3}
+    enemyShipPrefab: {fileID: 5261155741893644985, guid: 49ef62f1ab961d340baf5837141da610, type: 3}
+    minMaxEnemyAmount: {x: 50, y: 50}
     borderRadius: 2000
     borderThickness: 500
     duration: 30

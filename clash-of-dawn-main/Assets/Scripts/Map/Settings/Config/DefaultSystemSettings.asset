@@ -26,6 +26,7 @@ MonoBehaviour:
     colorSettings: {fileID: 11400000, guid: b6fd2d018badc624a920c808f030019c, type: 2}
     resolution: 128
     borderRadius: 0
+    eventBorderRadius: 1000
     minMaxSize: {x: 400, y: 4000}
     minMaxAmount: {x: 5, y: 5}
     moonShapeSettings: {fileID: 11400000, guid: 4bf0d1699daee264a9a51792d2da24b4, type: 2}
