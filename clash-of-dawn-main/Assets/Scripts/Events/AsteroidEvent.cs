@@ -48,10 +48,32 @@ public class AsteroidEvent : NetworkBehaviour
             return;
         }
 
+        if (Time.time > startTime + 5f && asteroids.Count == 0) {
+            EndAsteroidEvent();
+            EventManager.Instance.temp = !EventManager.Instance.temp;
+            return;
+        }
+
+        // Renew asteroids if needed.
         GameObject asteroid;
+        bool renew;
+        int j;
+        PlayerData pd;
         for (int i = asteroids.Count - 1; i >= 0; i--) {
             asteroid = asteroids[i];
-            if (Vector3.SqrMagnitude(asteroid.transform.position - transform.position) > sqrEventBorder) {
+
+            // If there is an involvedPlayer around the asteroid, don't renew the asteroid.
+            renew = true;
+            j = 0;
+            while (j < involvedPlayers.Count && renew) {
+                pd = involvedPlayers[j];
+                if (Vector3.SqrMagnitude(asteroid.transform.position - pd.playerShip.transform.position) < sqrEventBorder) {
+                    renew = false;
+                }
+                j++;
+            }
+
+            if (renew) {
                 asteroid.GetComponent<NetworkObject>().Despawn();
                 asteroids.RemoveAt(i);
                 SpawnAsteroid();
@@ -61,6 +83,20 @@ public class AsteroidEvent : NetworkBehaviour
     }
 
     private void SpawnAsteroid() {
+        // If no involvedPlayer is around the event area don't spawn an asteroid.
+        bool flag = true;
+        int j = 0;
+        PlayerData player;
+        while (j < involvedPlayers.Count && flag) {
+            player = involvedPlayers[j];
+            if (Vector3.SqrMagnitude(player.playerShip.transform.position - transform.position) < sqrEventBorder) {
+                flag = false;
+            }
+            j++;
+        }
+        if (flag)
+            return;
+
         GameObject asteroid = Instantiate(asteroidEventSetting.asteroidPrefab);
         Spawn(asteroid);
 

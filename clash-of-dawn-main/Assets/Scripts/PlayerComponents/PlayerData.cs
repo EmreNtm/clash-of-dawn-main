@@ -40,6 +40,15 @@ public sealed class PlayerData : NetworkBehaviour
 
     public EventInfos eventInfos;
 
+    [field: SerializeField]
+    [field: SyncVar]
+    public float health {
+        get;
+
+        private set;
+    }
+    private float damageImmuneTime;
+
     //Called on server
     public override void OnStartServer() {
         base.OnStartServer();
@@ -85,6 +94,8 @@ public sealed class PlayerData : NetworkBehaviour
     //Server calls this
     public void StartGame(NetworkConnection conn) {
         CreateMap(conn);
+        health = 100f;
+        damageImmuneTime = Time.time;
 
         //GameObject shipPrefab = Addressables.LoadAssetAsync<GameObject>("Ship").WaitForCompletion();
         GameObject shipInstance = Instantiate(GameManager.Instance.shipPrefab);
@@ -109,6 +120,17 @@ public sealed class PlayerData : NetworkBehaviour
     [TargetRpc]
     private void CreateMap(NetworkConnection conn) {
         MapManager.Instance.CreateSystem(MapManager.Instance.systemSettings.seed);
+    }
+
+    [ServerRpc]
+    public void DealDamage(float damage) {
+        if (damageImmuneTime > Time.time)
+            return;
+
+        damageImmuneTime = Time.time + 0.1f;
+
+        health = health - damage < 0 ? 0 : health - damage;
+        Debug.Log("deal damage health: " + health);
     }
 
 }

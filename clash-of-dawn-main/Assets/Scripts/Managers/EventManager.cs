@@ -27,12 +27,13 @@ public class EventManager : NetworkBehaviour
         asteroidEvents = new();
     }
 
-    private bool temp = false;
+    public bool temp = false;
     private GameObject tempObject;
     private void Update() {
         if (!IsServer)
             return;
 
+        // Event start with R key for testing.
         if (GameManager.Instance.started && !temp && Input.GetKeyDown(KeyCode.R)) {
             tempObject = StartAsteroidEvent(PlayerData.Instance);
             temp = !temp;
@@ -95,6 +96,7 @@ public class EventManager : NetworkBehaviour
 
         GameObject eventObject = Instantiate(asteroidEventSetting.eventPrefab);
         Spawn(eventObject);
+        eventObject.transform.position = eventPosition;
         asteroidEvents.Add(eventObject);
         float sqrRadius = asteroidEventSetting.eventInvolvedPlayersRadius;
         sqrRadius *= sqrRadius;
