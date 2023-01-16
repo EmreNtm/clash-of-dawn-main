@@ -544,6 +544,24 @@ MonoBehaviour:
     eventStartingCooldown: 0
     eventInvolvedPlayersRadius: 0
     eventPrefab: {fileID: 0}
+    asteroidPrefab: {fileID: 0}
+    minMaxAsteroidSize: {x: 0, y: 0}
+    asteroidAmount: 0
+    borderRadius: 0
+    borderThickness: 0
+    duration: 0
+  enemyShipEventSetting:
+    eventChance: 0
+    eventCooldown: 0
+    eventStartingCooldown: 0
+    eventInvolvedPlayersRadius: 0
+    eventPrefab: {fileID: 0}
+    enemyShipPrefab: {fileID: 0}
+    minMaxEnemyAmount: {x: 0, y: 0}
+    borderRadius: 0
+    borderThickness: 0
+    duration: 0
+  temp: 0
 --- !u!114 &520006535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -757,7 +775,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 563816483}
   _networkObjectCache: {fileID: 563816483}
   mapManagerPrefab: {fileID: 5921969082350682657, guid: 474fc46cdb708064a80add29662fae47, type: 3}
-  shipPrefab: {fileID: 1484421572893219048, guid: b04c0e2a488a44c47bd994eb5554ae9e, type: 3}
+  shipPrefab: {fileID: 1484421572893219048, guid: b6c353cf60fbac249824c3fcadcad9a0, type: 3}
   canStart: 0
   started: 0
 --- !u!114 &563816483

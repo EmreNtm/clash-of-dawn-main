@@ -13,8 +13,14 @@ public class MultiplayerShipController : NetworkBehaviour
     private Transform myCamera;
     [SerializeField]
     private Transform thirdPersonCamera;
-    [SerializeField] private LayerMask playerShipMask;
+    [SerializeField]
+    private Transform shipAimCam;
+    [SerializeField] 
+    private LayerMask playerShipMask;
     private Camera shipCamera;
+    [SerializeField]
+    private GameObject VoyageCam;
+
 
     public struct MoveData {
         public Vector3 targetDirection;
@@ -122,6 +128,7 @@ public class MultiplayerShipController : NetworkBehaviour
         base.OnStartClient();
 
         thirdPersonCamera.gameObject.SetActive(IsOwner);
+        shipAimCam.gameObject.SetActive(IsOwner);
         myCamera.gameObject.SetActive(IsOwner);
     }
 
@@ -256,7 +263,20 @@ public class MultiplayerShipController : NetworkBehaviour
 
         if (Input.GetButtonDown("Fire2")) {
             lockingShipAim = !lockingShipAim;
+            VoyageCam.SetActive(true);
         }
+
+        if (Input.GetKeyDown(KeyCode.X)) {
+            if (lockingShipAim && VoyageCam.activeSelf) {
+                VoyageCam.SetActive(false);
+            } else if (lockingShipAim) {
+                VoyageCam.SetActive(true);
+                lockingShipAim = false;
+            } else {
+                lockingShipAim = true;
+                VoyageCam.SetActive(false);
+            }
+        } 
     }
 
     //Before fixed update

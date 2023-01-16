@@ -47,6 +47,7 @@ public class EnemyShipEvent : NetworkBehaviour
             return;
         }
 
+        // EnemyShip amount condition to end event
         if (Time.time > startTime + 5f && enemyShips.Count == 0) {
             EndEnemyShipEvent();
             EventManager.Instance.temp = !EventManager.Instance.temp;
