@@ -454,6 +454,7 @@ public class MapManager : NetworkBehaviour
     }
 
     private void OnDrawGizmos() {
+        return;
         Color c;
         int points = 20;
         PlanetObject po;

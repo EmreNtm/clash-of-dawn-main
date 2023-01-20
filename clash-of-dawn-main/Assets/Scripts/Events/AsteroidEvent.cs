@@ -143,6 +143,9 @@ public class AsteroidEvent : NetworkBehaviour
         foreach (GameObject asteroid in asteroids) {
             asteroid.GetComponent<NetworkObject>().Despawn();
         }
+
+        EventManager.Instance.asteroidEvents.Remove(this.gameObject);
+
         Despawn();
         Debug.Log("Asteroid Event is Over!");
     }

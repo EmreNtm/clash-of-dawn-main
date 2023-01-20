@@ -12,6 +12,8 @@ public sealed class GameManager : NetworkBehaviour
     
     public static GameManager Instance { get; private set; }
 
+    public GameSettings gameSettings;
+
     // Spawnable prefabs.
     public GameObject mapManagerPrefab;
     public GameObject shipPrefab;
@@ -45,6 +47,8 @@ public sealed class GameManager : NetworkBehaviour
 
         GameObject go = Instantiate(mapManagerPrefab);
         Spawn(go);
+
+        ShipGenerator.Instance.Initialize();
 
         for (int i = 0; i < players.Count; i++) {
             players[i].StartGame(players[i].Owner);

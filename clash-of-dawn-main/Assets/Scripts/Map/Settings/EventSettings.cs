@@ -35,12 +35,25 @@ public class EventSettings : ScriptableObject
         public float eventInvolvedPlayersRadius;
         public GameObject eventPrefab;
 
-        public GameObject enemyShipPrefab;
         public Vector2 minMaxEnemyAmount;
         public float borderRadius;
         public float borderThickness;
         public float duration;
     }
     public EnemyShipEventSetting enemyShipEventSetting;
+
+    [System.Serializable]
+    public struct CtfEventSetting {
+        public float eventStartingCooldown;
+        public float eventInvolvedPlayersRadius;
+        public GameObject eventPrefab;
+
+        public Vector2 minMaxEnemyAmount;
+        public float borderRadius;
+        public float borderThickness;
+        public float flagAreaRadius;
+        public float captureProgressInterval;
+    }
+    public CtfEventSetting ctfEventSetting;
 
 }

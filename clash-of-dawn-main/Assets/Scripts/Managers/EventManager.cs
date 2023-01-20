@@ -15,11 +15,11 @@ public class EventManager : NetworkBehaviour
     public EventSettings eventSettings;
     [HideInInspector]
     public EventSettings.AsteroidEventSetting asteroidEventSetting;
-    private List<GameObject> asteroidEvents;
+    public List<GameObject> asteroidEvents;
 
     [HideInInspector]
     public EventSettings.EnemyShipEventSetting enemyShipEventSetting;
-    private List<GameObject> enemyShipEvents;
+    public List<GameObject> enemyShipEvents;
 
     private float eventCheckCounter;
 
@@ -54,10 +54,14 @@ public class EventManager : NetworkBehaviour
         eventCheckCounter = Time.time + eventSettings.eventCheckInterval;
 
         foreach (PlayerData pd in GameManager.Instance.players) {
-            if (IsReadyForAsteroidEvent(pd))
+            if (IsReadyForAsteroidEvent(pd)) {
                 StartAsteroidEvent(pd);
-            if (IsReadyForEnemyShipEvent(pd))
+                return;
+            }
+            if (IsReadyForEnemyShipEvent(pd)) {
                 StartEnemyShipEvent(pd);
+                return;
+            }
         }
     }
 
@@ -126,7 +130,39 @@ public class EventManager : NetworkBehaviour
     }
 
     private bool IsReadyForEnemyShipEvent(PlayerData pd) {
-        return false;
+        // Game start check
+        if (!GameManager.Instance.started)
+            return false;
+
+        // Null checks
+        if (MapManager.Instance == null)
+            return false;
+
+        // Check the event chance
+        if (Random.Range(0f, 1f) > enemyShipEventSetting.eventChance)
+            return false;
+
+        // Check if player is already having an event
+        if (pd.eventInfos.isHavingEnemyShipEvent)
+            return false;
+
+        // Check if time is ready
+        Debug.Log("current time: " + Time.time + ", ready time: " + pd.eventInfos.enemyShipEventReadyTime);
+        if (pd.eventInfos.enemyShipEventReadyTime > Time.time)
+            return false;
+
+        // Check if position is ready;
+        foreach (GameObject planet in MapManager.Instance.planets) {
+            if (IsInPlanetEventBorders(pd, planet))
+                return false;
+            
+            foreach (GameObject moon in planet.GetComponent<PlanetObject>().moons) {
+                if (IsInPlanetEventBorders(pd, planet))
+                    return false;
+            }
+        }
+
+        return true;
     }
 
     private GameObject StartEnemyShipEvent(PlayerData pd) {

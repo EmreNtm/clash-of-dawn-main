@@ -74,7 +74,8 @@ public class EnemyShipEvent : NetworkBehaviour
             }
 
             if (destroy) {
-                enemyShip.GetComponent<NetworkObject>().Despawn();
+                // enemyShip.GetComponent<NetworkObject>().Despawn();
+                ShipGenerator.Instance.DestroyShip(enemyShip);
                 enemyShips.RemoveAt(i);
                 Debug.Log("Destroyed!");
             }
@@ -96,8 +97,9 @@ public class EnemyShipEvent : NetworkBehaviour
         if (flag)
             return;
 
-        GameObject enemyShip = Instantiate(enemyShipEventSetting.enemyShipPrefab);
-        Spawn(enemyShip);
+        // GameObject enemyShip = Instantiate(enemyShipEventSetting.enemyShipPrefab);
+        // Spawn(enemyShip);
+        GameObject enemyShip = ShipGenerator.Instance.RequestShips(1, Vector3.zero)[0];
 
         foreach (PlayerData pd in GameManager.Instance.players) {
             TargetSpawnEnemyShip(pd.Owner, enemyShip);
@@ -126,12 +128,13 @@ public class EnemyShipEvent : NetworkBehaviour
 
     public void EndEnemyShipEvent() {
         foreach (PlayerData pd in involvedPlayers) {
-            pd.eventInfos.EnemyShipEventReadyTime = Time.time + 30f;
+            pd.eventInfos.enemyShipEventReadyTime = Time.time + 30f;
             pd.eventInfos.isHavingEnemyShipEvent = false;
         }
 
         foreach (GameObject enemyShip in enemyShips) {
-            enemyShip.GetComponent<NetworkObject>().Despawn();
+            // enemyShip.GetComponent<NetworkObject>().Despawn();
+            ShipGenerator.Instance.DestroyShip(enemyShip);
         }
         Despawn();
         Debug.Log("EnemyShip Event is Over!");

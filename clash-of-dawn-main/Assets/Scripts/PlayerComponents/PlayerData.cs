@@ -32,10 +32,11 @@ public sealed class PlayerData : NetworkBehaviour
     public struct EventInfos {
 
         public float asteroidEventReadyTime;
-        public float EnemyShipEventReadyTime;
+        public float enemyShipEventReadyTime;
+        public float ctfEventReadyTime;
         public bool isHavingAsteroidEvent;
         public bool isHavingEnemyShipEvent;
-
+        public bool isHavingCtfEvent;
     }
 
     public EventInfos eventInfos;
@@ -104,9 +105,11 @@ public sealed class PlayerData : NetworkBehaviour
 
         eventInfos = new EventInfos();
         eventInfos.asteroidEventReadyTime = Time.time + EventManager.Instance.asteroidEventSetting.eventStartingCooldown;
-        eventInfos.EnemyShipEventReadyTime = Time.time + EventManager.Instance.EnemyShipEventStartingCooldown;
+        eventInfos.enemyShipEventReadyTime = Time.time + EventManager.Instance.enemyShipEventSetting.eventStartingCooldown;
+        eventInfos.ctfEventReadyTime = Time.time + EventManager.Instance.eventSettings.ctfEventSetting.eventStartingCooldown;
         eventInfos.isHavingAsteroidEvent = false;
         eventInfos.isHavingEnemyShipEvent = false;
+        eventInfos.isHavingCtfEvent = false;
     }
 
     //Server calls this

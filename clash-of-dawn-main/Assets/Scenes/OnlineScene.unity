@@ -245,6 +245,86 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 19992618}
   m_CullTransparentMesh: 1
+--- !u!1 &155071820
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 155071823}
+  - component: {fileID: 155071822}
+  - component: {fileID: 155071821}
+  m_Layer: 0
+  m_Name: Ship_Generator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &155071821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155071820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsNested>k__BackingField: 0
+  <ComponentIndex>k__BackingField: 0
+  _networkBehaviours:
+  - {fileID: 155071822}
+  <ParentNetworkObject>k__BackingField: {fileID: 0}
+  <ChildNetworkObjects>k__BackingField: []
+  _isNetworked: 1
+  _isGlobal: 0
+  _defaultDespawnType: 0
+  NetworkObserver: {fileID: 0}
+  <PrefabId>k__BackingField: -1
+  _scenePathHash: 2312642977
+  <SceneId>k__BackingField: 9932725956390536565
+  <AssetPathHash>k__BackingField: 0
+  _sceneNetworkObjects:
+  - {fileID: 155071821}
+  - {fileID: 520006535}
+  - {fileID: 563816483}
+--- !u!114 &155071822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155071820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 716f4130903a7104cb043c3e587b4a94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 155071821}
+  _networkObjectCache: {fileID: 155071821}
+  enemyShipPrefab: {fileID: 3777969732237159466, guid: dea515c859b8b8745889a65f0e7786fb, type: 3}
+--- !u!4 &155071823
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155071820}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 14.067202, y: 6.970956, z: -908.11694}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1139339405}
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &275305107
 GameObject:
   m_ObjectHideFlags: 0
@@ -550,6 +630,7 @@ MonoBehaviour:
     borderRadius: 0
     borderThickness: 0
     duration: 0
+  asteroidEvents: []
   enemyShipEventSetting:
     eventChance: 0
     eventCooldown: 0
@@ -561,6 +642,7 @@ MonoBehaviour:
     borderRadius: 0
     borderThickness: 0
     duration: 0
+  enemyShipEvents: []
   temp: 0
 --- !u!114 &520006535
 MonoBehaviour:
@@ -589,6 +671,7 @@ MonoBehaviour:
   <SceneId>k__BackingField: 9932725954226587785
   <AssetPathHash>k__BackingField: 0
   _sceneNetworkObjects:
+  - {fileID: 155071821}
   - {fileID: 520006535}
   - {fileID: 563816483}
 --- !u!4 &520006536
@@ -774,6 +857,7 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 563816483}
   _networkObjectCache: {fileID: 563816483}
+  gameSettings: {fileID: 11400000, guid: cb6218b88add9d241b4e22d660490355, type: 2}
   mapManagerPrefab: {fileID: 5921969082350682657, guid: 474fc46cdb708064a80add29662fae47, type: 3}
   shipPrefab: {fileID: 1484421572893219048, guid: b6c353cf60fbac249824c3fcadcad9a0, type: 3}
   canStart: 0
@@ -805,6 +889,7 @@ MonoBehaviour:
   <SceneId>k__BackingField: 9932725955946759176
   <AssetPathHash>k__BackingField: 0
   _sceneNetworkObjects:
+  - {fileID: 155071821}
   - {fileID: 520006535}
   - {fileID: 563816483}
 --- !u!4 &563816484
@@ -1188,7 +1273,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &949249282
 GameObject:
@@ -1449,7 +1534,38 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1139339404
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1139339405}
+  m_Layer: 0
+  m_Name: ShipHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1139339405
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1139339404}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 155071823}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1207934062
 GameObject:
@@ -1546,7 +1662,7 @@ RectTransform:
   - {fileID: 1387696652}
   - {fileID: 977206835}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1973,7 +2089,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &1842218049
 MonoBehaviour:
@@ -2118,7 +2234,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1900511178
 MonoBehaviour:
