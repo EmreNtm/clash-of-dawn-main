@@ -140,20 +140,18 @@ public class MultiplayerShipController : NetworkBehaviour
         InstanceFinder.TimeManager.OnPostTick += TimeManager_OnPostTick;
     }
 
-    private void Start() {
-        ServerSetShipSpawnPosition();
-    }
-
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void ServerSetShipSpawnPosition() {
+        float offset = MapManager.Instance.systemSettings.sunRadius * MapManager.Instance.systemSettings.scale;
         foreach (PlayerData pd in GameManager.Instance.players) {
-            TargetSetShipSpawnPoint(pd.Owner, Random.Range(200, 1000));
+            TargetSetShipSpawnPoint(pd.Owner,  offset + Random.Range(20000, 20800));
         }
     }
 
     [TargetRpc]
     public void TargetSetShipSpawnPoint(NetworkConnection conn, float random) {
-        shipRigidbody.transform.position = new Vector3(0, 0, random);
+        shipRigidbody.transform.position = new Vector3(0, random, 0);
+        Debug.Log(random);
     }
 
     private void OnDestroy() {

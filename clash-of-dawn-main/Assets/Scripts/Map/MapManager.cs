@@ -15,6 +15,7 @@ public class MapManager : NetworkBehaviour
 
     public GameObject planetPrefab;
     public GameObject stationPrefab;
+    public GameObject sunBody;
 
     public static MapManager Instance { get; private set; }
 
@@ -86,6 +87,16 @@ public class MapManager : NetworkBehaviour
         }
         planetsToCreate = Shuffle(planetsToCreate);
 
+        sunBody.GetComponent<PlanetObject>().shapeSettings.planetRadius = systemSettings.sunRadius * systemSettings.scale;
+        sunBody.GetComponent<PlanetObject>().CreatePlanet();
+        GameObject go = Instantiate(MapManager.Instance.stationPrefab);
+        stations.Add(go);
+        GameManager.Instance.Spawn(go);
+
+        foreach (PlayerData pd in GameManager.Instance.players) {
+            TargetSpawnStation(pd.Owner, sunBody, go, 5000f);
+        }
+
         Debug.Log(systemSettings.seed);
         if (IsServer) {
             for (int i = planetsToCreate.Count - 1; i >= 0; i--) {
@@ -156,7 +167,12 @@ public class MapManager : NetworkBehaviour
         ss.planetRadius = planetSetting.minMaxSize.x + parameters.planetRadiusRandom * (planetSetting.minMaxSize.y - planetSetting.minMaxSize.x);
         ss.planetRadius *= systemScale;
 
-        float lastOrbitDistance = planets.Count != 0 ? planets[planets.Count - 1].GetComponent<PlanetObject>().orbitDistance : 0f;
+        float lastOrbitDistance;
+        if (IsHost) {
+            lastOrbitDistance = planets.Count != planetsToCreate.Count ? planets[planets.Count - 1].GetComponent<PlanetObject>().orbitDistance : systemSettings.sunRadius * systemSettings.scale;
+        }
+        else
+            lastOrbitDistance = planets.Count != 0 ? planets[planets.Count - 1].GetComponent<PlanetObject>().orbitDistance : systemSettings.sunRadius * systemSettings.scale;
         lastOrbitDistance += ss.planetRadius;
         //Constant distance between aligned planets.
         lastOrbitDistance += systemSettings.increasePlanetOrbitDistance * systemScale;
@@ -319,6 +335,21 @@ public class MapManager : NetworkBehaviour
         }
         stations.Clear();
         stations = new();
+
+        sunBody.GetComponent<PlanetObject>().shapeSettings.planetRadius = systemSettings.sunRadius * systemSettings.scale;
+        sunBody.GetComponent<PlanetObject>().CreatePlanet();
+        GameObject go = Instantiate(stationPrefab);
+        go.transform.parent = this.transform.GetChild(0).GetChild(1);
+        go.transform.localScale *= systemScale; 
+        go.GetComponent<CTFManager>().parentPlanet = sunBody;
+        float planetRadius = sunBody.GetComponent<PlanetObject>().shapeSettings.planetRadius;
+        float distance = go.transform.localScale.x / 2f;
+        distance += 5000f * systemScale;
+        distance += planetRadius;
+        Vector3 orbitPos = sunBody.transform.localPosition + Vector3.forward * distance;
+        go.transform.localPosition = orbitPos;
+        go.transform.rotation = Quaternion.LookRotation(go.transform.position - sunBody.transform.position, go.transform.up);
+        stations.Add(go);
         
         planetsToCreate = new();
         foreach (SystemSettings.PlanetSetting planetSetting in systemSettings.planetSettings) {
@@ -356,7 +387,7 @@ public class MapManager : NetworkBehaviour
         ss.planetRadius = planetSetting.minMaxSize.x + (float) serverPrng.NextDouble() * (planetSetting.minMaxSize.y - planetSetting.minMaxSize.x);
         ss.planetRadius *= systemScale;
 
-        float lastOrbitDistance = planets.Count != 0 ? planets[planets.Count - 1].GetComponent<PlanetObject>().orbitDistance : 0f;
+        float lastOrbitDistance = planets.Count != 0 ? planets[planets.Count - 1].GetComponent<PlanetObject>().orbitDistance : systemSettings.sunRadius * systemSettings.scale;
         lastOrbitDistance += ss.planetRadius;
         //Constant distance between aligned planets.
         lastOrbitDistance += systemSettings.increasePlanetOrbitDistance * systemScale;

@@ -101,6 +101,7 @@ public sealed class PlayerData : NetworkBehaviour
         //GameObject shipPrefab = Addressables.LoadAssetAsync<GameObject>("Ship").WaitForCompletion();
         GameObject shipInstance = Instantiate(GameManager.Instance.shipPrefab);
         Spawn(shipInstance, Owner);
+        shipInstance.GetComponent<MultiplayerShipController>().ServerSetShipSpawnPosition();
         playerShip = shipInstance;
 
         eventInfos = new EventInfos();

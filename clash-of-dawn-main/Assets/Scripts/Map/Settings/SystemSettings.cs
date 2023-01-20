@@ -9,7 +9,7 @@ public class SystemSettings : ScriptableObject
     public int seed;
     public float scale;
     public float maxPlaneAngle;
-    public float borderRadius;
+    public float sunRadius;
     public float increasePlanetOrbitDistance;
     public float increaseMoonOrbitDistance;
     
