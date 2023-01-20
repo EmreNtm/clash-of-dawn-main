@@ -80,10 +80,13 @@ public class BulletParticle2 : NetworkBehaviour
             explode.Init(KillShape);
          }
 
-         if(other.transform.root.TryGetComponent(out ShipHealth en))
-         {
-            en.TakeDamage(damage);
-         }
+        //  if(other.transform.root.TryGetComponent(out EnemyData en))
+        //  {
+        //     en.DealDamage(damage);
+        //  }
+        if (IsServer && other.layer == LayerMask.NameToLayer("EnemyShip")) {
+            other.GetComponent<EnemyData>().DealDamage(GameManager.Instance.gameSettings.playerBulletDamage);
+        }
      } 
      
      private void KillShape(Explosion explosion)

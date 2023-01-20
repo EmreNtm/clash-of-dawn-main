@@ -67,7 +67,7 @@ public class AIbullet : MonoBehaviour
             explode.Init(KillShape);
          }
 
-         if(true || other.CompareTag("WeaponTarget"))
+         //if(IsServer && other.layer == LayerMask.NameToLayer("EnemyShip"))
          {
             agent.AddReward(6f);
             agent.bulletCount--;

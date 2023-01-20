@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: DefaultGameSettings
   m_EditorClassIdentifier: 
   maxEnemyAmount: 20
+  playerBulletDamage: 5
