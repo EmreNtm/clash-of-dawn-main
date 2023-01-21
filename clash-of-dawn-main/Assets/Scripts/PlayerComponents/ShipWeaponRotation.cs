@@ -22,6 +22,8 @@ public class ShipWeaponRotation : NetworkBehaviour
     public float maxTurretAngle = 90f;
     public float maxGunAngle = 45f;
 
+    public bool isFireLocked = false;
+
     private void Update() {
         if (!IsOwner)
             return;
@@ -45,9 +47,11 @@ public class ShipWeaponRotation : NetworkBehaviour
         if (currentTurretAngle > maxTurretAngle) {
             turretProjectedDir = transform.forward;
             maxGunAngle = 0f;
+            isFireLocked = true;
         }else
         {
             maxGunAngle = 45f;
+            isFireLocked = false;
         }
 
         if (currentGunAngle >= maxGunAngle  && currentGunAngle < -maxGunAngle)

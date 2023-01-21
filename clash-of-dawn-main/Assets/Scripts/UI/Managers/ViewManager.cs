@@ -46,4 +46,13 @@ public sealed class ViewManager : MonoBehaviour
         }
     }
 
+    public void Hide<TView>() where TView : View {
+        foreach (View view in views) {
+            if (view is TView) {
+                view.Hide();
+                return;
+            }
+        }
+    }
+
 }

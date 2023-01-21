@@ -8,6 +8,9 @@ using FishNet.Connection;
 [RequireComponent(typeof(ParticleSystem))]
 public class BulletParticle2 : NetworkBehaviour
 {
+
+    public ShipWeaponRotation swr;
+
     [SerializeField] private Explosion explosion;
     public Rigidbody attachedShipRigidBody;
     public float damage = 50f;
@@ -45,7 +48,7 @@ public class BulletParticle2 : NetworkBehaviour
         if (!IsOwner)
             return;
 
-        if (Input.GetButton("Fire1") && !firing )
+        if (Input.GetButton("Fire1") && !firing && !swr.isFireLocked)
         {
             Debug.Log("Firing");
             ServerFireFlak();

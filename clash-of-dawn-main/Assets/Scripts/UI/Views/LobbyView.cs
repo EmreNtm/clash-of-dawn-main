@@ -32,8 +32,8 @@ public class LobbyView : View
 
         if (InstanceFinder.IsHost) {
             startGameButton.onClick.AddListener(() => {
-                GameManager.Instance.StartGame();
-                ViewManager.Instance.Show<MainView>();
+                //GameManager.Instance.StartGame();
+                //ViewManager.Instance.Show<MainView>();
             });
 
             startGameButton.gameObject.SetActive(true);
@@ -48,8 +48,8 @@ public class LobbyView : View
         if (!isInitialized)
             return;
 
-         toggleReadyButtonText.color = PlayerData.Instance.isReady ? Color.green : Color.red;
-         startGameButton.interactable = GameManager.Instance.canStart;
+        toggleReadyButtonText.color = PlayerData.Instance.isReady ? Color.green : Color.red;
+        startGameButton.interactable = GameManager.Instance.canStart;
 
         infoText.text = $"Is Server = {InstanceFinder.IsServer}, Is Client = {InstanceFinder.IsClient}, Is Host = {InstanceFinder.IsHost}";
 

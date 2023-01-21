@@ -58,7 +58,7 @@ public class MapManager : NetworkBehaviour
 
     public void CreateSystem(int seed = 0) {
         //return;
-        systemSettings.seed = seed != 0 ? seed : Random.Range(-100000, 100000);
+        systemSettings.seed = seed; // != 0 ? seed : Random.Range(-100000, 100000);
         prng = new System.Random(systemSettings.seed);
         serverPrng = new System.Random(systemSettings.seed);
         foreach (GameObject planet in planets) {

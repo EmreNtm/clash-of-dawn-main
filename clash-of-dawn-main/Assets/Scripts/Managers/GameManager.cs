@@ -41,7 +41,7 @@ public sealed class GameManager : NetworkBehaviour
     }
 
     [Server]
-    public void StartGame() {
+    public void StartGame(int seed) {
         if (!canStart)
             return;
 
@@ -51,7 +51,7 @@ public sealed class GameManager : NetworkBehaviour
         ShipGenerator.Instance.Initialize();
 
         for (int i = 0; i < players.Count; i++) {
-            players[i].StartGame(players[i].Owner);
+            players[i].StartGame(players[i].Owner, seed);
         }
 
         started = true;

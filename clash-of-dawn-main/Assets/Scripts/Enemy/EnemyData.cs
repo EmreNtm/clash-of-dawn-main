@@ -41,6 +41,7 @@ public class EnemyData : NetworkBehaviour
         damageImmuneTime = Time.time + 0.1f;
 
         health = health - damage < 0 ? 0 : health - damage;
+        GetComponentInChildren<HealthBar>().UpdateHealthBar(100f, health);
         Debug.Log("deal damage health: " + health);
     }
 

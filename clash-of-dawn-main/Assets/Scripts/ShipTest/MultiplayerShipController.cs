@@ -151,6 +151,7 @@ public class MultiplayerShipController : NetworkBehaviour
     [TargetRpc]
     public void TargetSetShipSpawnPoint(NetworkConnection conn, float random) {
         shipRigidbody.transform.position = new Vector3(0, random, 0);
+        PlayerData.Instance.spawnPoint = shipRigidbody.transform.position;
         Debug.Log(random);
     }
 

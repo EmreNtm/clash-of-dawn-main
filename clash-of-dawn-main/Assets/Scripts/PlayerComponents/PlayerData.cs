@@ -11,8 +11,14 @@ public sealed class PlayerData : NetworkBehaviour
 
     public static PlayerData Instance { get; private set; }
 
-    [SyncVar]
-    public string username;
+    [field: SerializeField]
+    [field: SyncVar]
+    public string username {
+        get;
+
+        [ServerRpc]
+        set;
+    }
 
     [SyncVar]
     public bool isReady;
@@ -50,6 +56,8 @@ public sealed class PlayerData : NetworkBehaviour
     }
     private float damageImmuneTime;
 
+    public Vector3 spawnPoint;
+
     //Called on server
     public override void OnStartServer() {
         base.OnStartServer();
@@ -81,8 +89,8 @@ public sealed class PlayerData : NetworkBehaviour
         if (!IsOwner)
             return;
 
-        if (Input.GetKeyDown(KeyCode.R)) {
-            ServerSetIsReady(!isReady);
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            ViewManager.Instance.Show<EscView>();
         }
     }
 
@@ -93,8 +101,8 @@ public sealed class PlayerData : NetworkBehaviour
     }
 
     //Server calls this
-    public void StartGame(NetworkConnection conn) {
-        CreateMap(conn);
+    public void StartGame(NetworkConnection conn, int seed) {
+        CreateMap(conn, seed);
         health = 100f;
         damageImmuneTime = Time.time;
 
@@ -122,8 +130,8 @@ public sealed class PlayerData : NetworkBehaviour
     }
 
     [TargetRpc]
-    private void CreateMap(NetworkConnection conn) {
-        MapManager.Instance.CreateSystem(MapManager.Instance.systemSettings.seed);
+    private void CreateMap(NetworkConnection conn, int seed) {
+        MapManager.Instance.CreateSystem(seed);
     }
 
     [ServerRpc]
@@ -134,7 +142,34 @@ public sealed class PlayerData : NetworkBehaviour
         damageImmuneTime = Time.time + 0.1f;
 
         health = health - damage < 0 ? 0 : health - damage;
-        Debug.Log("deal damage health: " + health);
+        playerShip.GetComponentInChildren<HealthBar>().UpdateHealthBar(100f, health);
+        if (health <= 0)
+            DestroyShip();
+    }
+
+    [ServerRpc(RequireOwnership=false)]
+    public void Respawn() {
+        foreach (PlayerData pd in GameManager.Instance.players) {
+            TargetRespawn(pd.Owner, playerShip);
+        }
+    }
+
+    [TargetRpc]
+    private void TargetRespawn(NetworkConnection conn, GameObject ship) {
+        ship.transform.position = spawnPoint;
+        ship.SetActive(true);
+    }
+
+    private void DestroyShip() {
+        foreach (PlayerData pd in GameManager.Instance.players) {
+            TargetDestroyShip(pd.Owner, playerShip);
+        }
+    }
+
+    [TargetRpc]
+    private void TargetDestroyShip(NetworkConnection conn, GameObject ship) {
+        ship.SetActive(false);
+        ViewManager.Instance.Show<RespawnView>();
     }
 
 }
