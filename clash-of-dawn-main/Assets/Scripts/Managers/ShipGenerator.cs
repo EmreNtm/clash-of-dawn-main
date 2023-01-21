@@ -30,15 +30,16 @@ public class ShipGenerator : NetworkBehaviour
             availableShips.Add(enemyShip);
 
             foreach (PlayerData pd in GameManager.Instance.players) {
-                TargetSpawnEnemyShip(pd.Owner, enemyShip);
+                TargetSpawnEnemyShip(pd.Owner, enemyShip, i == GameManager.Instance.gameSettings.maxEnemyAmount);
             }
         }
     }
 
     [TargetRpc]
-    private void TargetSpawnEnemyShip(NetworkConnection conn, GameObject enemyShip) {
+    private void TargetSpawnEnemyShip(NetworkConnection conn, GameObject enemyShip, bool isLastShip) {
         enemyShip.gameObject.SetActive(false);
         enemyShip.transform.parent = transform.GetChild(0);
+        ViewManager.Instance.Hide<LoadingView>();
     }
 
     public GameObject[] RequestShips(int amount, Vector3 pos) {

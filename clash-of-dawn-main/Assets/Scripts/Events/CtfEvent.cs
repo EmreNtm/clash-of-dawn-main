@@ -23,6 +23,9 @@ public class CtfEvent : NetworkBehaviour
 
     [HideInInspector]
     public CTFManager ctfManager;
+    [HideInInspector]
+    public CtfProgressBar cpb;
+
 
     private Transform targetTransform;
     private float captureProgress = 0f;
@@ -117,6 +120,7 @@ public class CtfEvent : NetworkBehaviour
                     Debug.Log("Captured!");
             }
         }
+        cpb.UpdateProgressBar(captureProgress);
     }
 
     private void ReplaceEnemyShipsFarAway() {

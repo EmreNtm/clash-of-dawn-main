@@ -84,6 +84,7 @@ public class CTFManager : NetworkBehaviour
         eventObject.transform.parent = transform;
         eventObject.transform.position = eventPosition;
         eventObject.GetComponent<CtfEvent>().ctfManager = this;
+        eventObject.GetComponent<CtfEvent>().cpb = GetComponentInChildren<CtfProgressBar>();
         eventObject.GetComponent<CtfEvent>().SetTargetTransform(this.captureAreaTransform);
 
         Debug.Log("Ctf Event Started!");

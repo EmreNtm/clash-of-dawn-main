@@ -48,7 +48,7 @@ public class CreateGameView : View
         if (InstanceFinder.IsHost) {
             startGameButton.onClick.AddListener(() => {
                 GameManager.Instance.StartGame(seed);
-                ViewManager.Instance.Hide<CreateGameView>();
+                ViewManager.Instance.Show<LoadingView>();
             });
             startGameButton.gameObject.SetActive(true);
 
